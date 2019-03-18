@@ -1,5 +1,7 @@
 # AI-Project3-SP19
 
+Olivia Lyons
+
 **Purpose:** Use any or all of the AI techniques from this course to program an AI for a
 competition simulation.
 
