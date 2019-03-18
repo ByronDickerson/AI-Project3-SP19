@@ -1,4 +1,7 @@
-# AI-Project3-SP19
+﻿# AI-Project3-SP19
+
+**Programmers:**
+Clara Comstock
 
 Olivia Lyons
 
