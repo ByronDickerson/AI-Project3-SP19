@@ -4,6 +4,7 @@
 
 ```
 Clara Comstock
+Alex Kline
 Olivia Lyons
 Byron Dickerson
 ```
