@@ -4,6 +4,21 @@ Battlecode engine.
 
 Woo.
 
+Units
+
+Workers - these are the only units that you start with. They can clone themselves and lay down Factories or Rockets.
+
+Factories - these are "buildings" that produce any type of unit (except Rockets).
+
+Rangers - the "shooting" unit - these units can deal damage at long range.
+
+Knights - fast, durable meelee units.
+Mages - "Glass cannons." Extremely low health, but can deal devastating splash damage if they get close to the enemy. Can also unlock an ability that lets them teleport.
+
+Healers - aptly named, they heal units.
+
+Rockets - these are the vehicles that can get you to Mars. They're capable of holding 8 (or more, if you upgrade them) units, and can take off to bring them over to Mars
+
 Functions
 ---------
 game_turns()
