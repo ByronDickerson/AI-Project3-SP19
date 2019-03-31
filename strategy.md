@@ -1,3 +1,3 @@
-###stragegem
+# stragegem
 
 - [ ] hehe
