@@ -18,7 +18,9 @@ More testing will reveal if this is a good balance but it's a place to start
 ## Workers
 
 Blueprint rocket immediately.
+
 Collect karbonite as much as possible until a rocket can be built.
+
 Somewhere in there though we need to start making factories. we should have a few factories on Earth before the rocket is done. This is so we can make our dream rocket team, and also make more workers to get more karbonite etc.
 
 ## Knights
@@ -26,7 +28,9 @@ These are the tanks. They should focus entirely on combat, taking hits for the o
 
 ## Mages
 Mainly heal rockets and factories (is that possible? idk) 
+
 Next, heal rogues, then knights, then workers. 
+
 What about mage combat?
 
 ## Rogues
