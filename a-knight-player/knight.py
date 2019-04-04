@@ -4,6 +4,7 @@
 # retreat to healer if low
 
 import random
+import toolbox as tb
 
 # maybe consider also coding worker resource location
 
@@ -22,7 +23,7 @@ def knightAction(bc, gc, unit):
         # for units within attack range
         for other in shortrange:            
             # if the other unit is an enemy and knight can attack
-            if other.team != my_team and gc.is_attack_ready(unit.id):
+            if tb.enemy(gc, other) and gc.is_attack_ready(unit.id):
                 #attack
                 print('attacked a thing!')
                 gc.attack(unit.id, other.id)
@@ -36,7 +37,7 @@ def knightAction(bc, gc, unit):
             #for units within javelin range
             for other in midrange:
                 # if enemy detected, attack
-                if other.team != my_team:
+                if tb.enemy(gc, other):
                     gc.javelin(unit.id, other.id)
         # else no javelin, carry on
 
@@ -47,34 +48,15 @@ def knightAction(bc, gc, unit):
 
             for other in longrange:
                 # does this unit have low health and has it located a friendly healer?
-                seekhealer = unit.health < 50 and other.team == my_team and other.unit_type == bc.UnitType.Healer
-
-                # direction to walk in, should get changed below
-                d = bc.Direction.Center 
+                seekhealer = tb.lowHealth(unit) and (not tb.enemy(gc, other)) and other.unit_type == bc.UnitType.Healer
                 
                 # if enemy or a needed healer is spotted, go towards that unit
-                if seekhealer or other.team != my_team:
-                    # determine other's position, relative to ours
-                    ourX = unit.location.map_location().x
-                    ourY = unit.location.map_location().y
-                    otherX = other.location.map_location().x
-                    otherY = other.location.map_location().y
-                    distanceX = ourX - otherX # if distanceX is negative, the enemy is to the west
-                    distanceY = ourY - otherY # if distanceY is negative, the enemy is to the south
-
-                    # determine which direction is best to move in
-                    # 'abs()' returns the absolute value of a number
-                    if abs(distanceX) > abs(distanceY):
-                        if distanceX < 0: d = bc.Direction.West
-                        else: d = bc.Direction.East
-                    else:
-                        if distanceY < 0: d = bc.Direction.South
-                        else: d = bc.Direction.North                     
+                if seekhealer or tb.enemy(gc, other):
+                    d = tb.pathfind(bc, unit, other)                   
 
                 # if no better options, move randomly
                 else:
-                    directions = list(bc.Direction)
-                    d = random.choice(directions)
+                    d = tb.pathrand(bc)
                     
                 # take actual movement
                 if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
