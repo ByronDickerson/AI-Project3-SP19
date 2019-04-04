@@ -1,0 +1,39 @@
+import battlecode as bc
+import random
+
+possibleDirections = list(bc.Direction)
+unit = 0
+gc = 0
+
+def factoryLogic(unitParam, gcParam):
+    global unit
+    global gc
+    unit = unitParam
+    gc = gcParam
+    counter = [1, 2, 3]
+    count = random.choice(counter)
+    if not unit.structure_is_built():
+        return
+
+    # Try to unload existing units from structure's garrison
+    for direction in possibleDirections:
+        if gc.can_unload(unit.id, direction):
+            gc.unload(unit.id, direction)
+            return
+
+    if gc.round()<675:
+        if count==1:
+            if gc.can_produce_robot(unit.id, bc.UnitType.Knight):
+                gc.produce_robot(unit.id, bc.UnitType.Knight)
+                return
+
+        elif count==2:
+            if gc.can_produce_robot(unit.id, bc.UnitType.Ranger): 
+                gc.produce_robot(unit.id, bc.UnitType.Ranger)
+                return
+
+        elif count==3:
+            if gc.can_produce_robot(unit.id, bc.UnitType.Ranger):
+                gc.produce_robot(unit.id, bc.UnitType.Ranger)
+                return
+    return
