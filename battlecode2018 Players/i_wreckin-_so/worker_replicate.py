@@ -1,0 +1,2 @@
+class WorkerReplicate(object):
+    pass

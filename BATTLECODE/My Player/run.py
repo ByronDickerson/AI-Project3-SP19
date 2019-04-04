@@ -4,6 +4,7 @@ import sys
 import traceback
 import time
 
+import MyInfo
 import Factory
 import MyRanger
 
@@ -11,6 +12,8 @@ import os
 print(os.getcwd())
 
 print("pystarting")
+
+
 
 # A GameController is the main type that you talk to the game with.
 # Its constructor will connect to a running game.
@@ -35,13 +38,13 @@ gc.queue_research(bc.UnitType.Knight)
 my_team = gc.team()
 
 
-
 while True:
     # We only support Python 3, which means brackets around print()
     print('pyround:', gc.round(), 'time left:', gc.get_time_left_ms(), 'ms')
 
     # frequent try/catches are a good idea
     try:
+        
         # walk through our units:
         for unit in gc.my_units():
 
@@ -51,6 +54,7 @@ while True:
 
             if unit.unit_type == bc.UnitType.Ranger:
                 MyRanger.rangerLogic(unit, gc)
+                print('You have ', MyInfo.getNumUnits(unit.unit_type, gc), ' Rangers!')
             
             # first, let's look for nearby blueprints to work on
             location = unit.location

@@ -1,0 +1,2 @@
+class KnightAttack(object):
+    pass

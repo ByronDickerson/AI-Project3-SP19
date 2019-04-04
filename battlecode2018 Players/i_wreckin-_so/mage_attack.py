@@ -1,0 +1,2 @@
+class MageAttack(object):
+    pass
