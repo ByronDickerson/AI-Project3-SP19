@@ -64,10 +64,20 @@ class TeamRocket:
         self.builders.append(builder)
         
         
-def runWorker(worker, gc):
-    # if you are in the middle of building a rocket, keep doing that
-
-
+def runFactory(worker, gc):
+    print('h')
+    
+    
+class Info:
+    def __init__(self,gc):
+        self.numRockets = 0
+        self.numWorkers = 0
+        self.numKnights = 0
+        self.numMages = 0
+        self.num Rangers = 0
+        self.numFactoriesMars = self.numFactoriesEarth = 0
+        
+    #we dont need getters and setters, we can just directly access these vars with the info object
 
 
 
