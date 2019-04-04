@@ -9,7 +9,6 @@ import toolbox as tb
 # maybe consider also coding worker resource location
 
 def knightAction(bc, gc, unit):
-    print('knightAction called!')
 
     location = unit.location  # knight's current location
     my_team = gc.team()       # our team

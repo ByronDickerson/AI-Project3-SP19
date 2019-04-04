@@ -7,6 +7,8 @@ import random
 # returns a direction
 def pathfind(bc, unit, target):
     # direction to walk in, should get changed below
+    #print('seeking enemy!')
+    
     d = bc.Direction.Center 
                 
     ourX = unit.location.map_location().x
@@ -14,22 +16,24 @@ def pathfind(bc, unit, target):
     otherX = target.location.map_location().x
     otherY = target.location.map_location().y
 
-    # if distanceX is negative, the enemy is to the west
+    # if distanceX is negative, the enemy is to the east
     distanceX = ourX - otherX
-    # if distanceY is negative, the enemy is to the south
-    distanceY = ourY - otherY 
+    # if distanceY is negative, the enemy is to the north
+    distanceY = ourY - otherY
+
+    #print('Xdistance: ', distanceX)
 
     # determine which direction is best to move in
     # 'abs()' returns the absolute value of a number
     if abs(distanceX) > abs(distanceY):
         if distanceX < 0:
-            d = bc.Direction.West
-        else:
             d = bc.Direction.East
+        else:
+            d = bc.Direction.West
     elif distanceY < 0:
-        d = bc.Direction.South
-    else:
         d = bc.Direction.North
+    else:
+        d = bc.Direction.South
 
     return d
 
