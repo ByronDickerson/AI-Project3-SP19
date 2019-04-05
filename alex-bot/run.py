@@ -43,7 +43,7 @@ while True:
     # frequent try/catches are a good idea
     try:
 
-        info = MyInfo()
+        
         # walk through our units:
         for unit in gc.my_units():
 
@@ -56,7 +56,7 @@ while True:
 
             if unit.unit_type == bc.UnitType.Worker:
                 worker = Factory.Worker(unit) #instantiate custom worker object
-                Factory.workerLogic(gc, worker,info)
+                Factory.workerLogic(gc, worker)
 
 
                

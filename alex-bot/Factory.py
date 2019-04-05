@@ -34,7 +34,7 @@ def factoryLogic(unit, gc):
                 return
     return
 
-def rocketLogic(rocket, gc, info):
+def rocketLogic(rocket, gc):
     
     #if it isnt done being built then chill out
     if not rocket.structure_is_built():
@@ -90,7 +90,7 @@ class Worker:
 
 
 #input 'worker' is of the type Worker as defined in this file.
-def workerLogic(gc, worker,info):
+def workerLogic(gc, worker):
     
     #The worker will prioritize building
     #Then attacking
@@ -127,7 +127,7 @@ def workerLogic(gc, worker,info):
             return
     
     #wwhere 10 is the max number of workers
-    if info.getNumUnits(gc.UnitType.Worker,gc) < 10:
+    if MyInfo.getNumUnits(gc.UnitType.Worker,gc) < 10:
         for d in directions:
             if gc.can_replicate(worker.ID, d):
                 print(worker.ID, ' Am replicating ')
