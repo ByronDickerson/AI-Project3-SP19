@@ -50,6 +50,21 @@ def workerLogic(gc, unit):
             gc.replicate(unit.id, d)
             # a child is born. we should initialize it as a Worker class. but...for now...whatever man
 
+
+    if MyInfo.getNumUnits(bc.UnitType.Rocket, gc) < 2 and gc.karbonite() > bc.UnitType.Rocket.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Rocket, d):
+        try:
+            gc.build(unit.id, rocket_id)
+            print("building Rocket!")
+        except Exception as e:
+            print('Error:', e)
+            # use this to show where the error was
+            traceback.print_exc()
+
+        gc.blueprint(unit.id, bc.UnitType.Rocket, d)
+        print('built a rocket!')
+        # move onto the next unit
+        continue
+
 def rocketLogic(rocket, gc, info):
     
     #if it isnt done being built then chill out

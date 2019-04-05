@@ -50,38 +50,24 @@ while True:
             if unit.unit_type == bc.UnitType.Factory:
                 Factory.factoryLogic(unit, gc)
 
-            if unit.unit_type == bc.UnitType.Ranger:
+            elif unit.unit_type == bc.UnitType.Ranger:
                 MyRanger.rangerLogic(unit, gc)
 
-            if unit.unit_type == bc.UnitType.Worker:
+            elif unit.unit_type == bc.UnitType.Worker:
                 Worker.workerLogic(gc, unit)
 
-            
+            elif gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
+                gc.move_robot(unit.id, d)
             # okay, there weren't any dudes around
             # pick a random direction:
             d = random.choice(directions)
 
             # or, try to build a factory:
             if gc.karbonite() > bc.UnitType.Factory.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Factory, d):
-                gc.blueprint(unit.id, bc.UnitType.Factory, d)
+                if MyInfo.getNumUnits(bc.UnitType.Factory, gc) < 10:
+                    gc.blueprint(unit.id, bc.UnitType.Factory, d)
             # and if that fails, try to move
             
-
-            if MyInfo.getNumUnits(bc.UnitType.Rocket, gc) < 1 and gc.karbonite() > bc.UnitType.Rocket.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Rocket, d):
-                if unit.unit_type == bc.UnitType.Worker:
-                    try:
-                        gc.build(unit.id, rocket_id)
-                        print("building Rocket!")
-                    except:
-                        continue
-                    continue
-
-                gc.blueprint(unit.id, bc.UnitType.Rocket, d)
-                print('built a rocket!')
-                # move onto the next unit
-                continue
-            elif gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
-                gc.move_robot(unit.id, d)
 
     except Exception as e:
         print('Error:', e)
