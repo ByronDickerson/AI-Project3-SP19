@@ -93,7 +93,7 @@ def workerTryBuilding(gc, u ):
 
 def workerLogic(gc, worker):
     directions = MyInfo.directions
-    location = worker.location #does this work?
+    location = worker.location.map_location()#does this work?
     my_team = gc.team()
 
     #The worker will prioritize building
@@ -101,20 +101,29 @@ def workerLogic(gc, worker):
     #THen gathering resources
     #Then replicating
     #Then wandering around
+
+    #wwhere 10 is the max number of workers
+    if MyInfo.getNumUnits(bc.UnitType.Worker,gc) < 15:
+        for d in directions:
+            if gc.can_replicate(worker.id, d):
+                #print(worker.id, ' Am replicating ')
+                #print('Number of workers is', MyInfo.getNumUnits(bc.UnitType.Worker, gc))
+                gc.replicate(worker.id, d)
+                return
+            # a child is born. we should initialize it as a Worker class. but...for now...whatever man
+    
+    
     if workerTryBuilding(gc, worker):
         return 
 
     #up to 5 factories i guess
     #try to blueprint
 
-    if MyInfo.getNumUnits(bc.UnitType.Rocket, gc) < 3 and gc.round() >= 125:
+    if MyInfo.getNumUnits(bc.UnitType.Rocket, gc) < 3 and gc.round() >= 100:
         blueprint(worker, directions, location, bc.UnitType.Rocket, gc)
 
     if MyInfo.getNumUnits(bc.UnitType.Factory, gc) < 5:
         blueprint(worker,directions,location,bc.UnitType.Factory, gc)
-    
-
-
     
 
     #attack nearby enemy
@@ -134,16 +143,6 @@ def workerLogic(gc, worker):
             gc.harvest(worker.id, d)
             #print(worker.ID, ' Am harvesting stuff ')
             return
-    
-    #wwhere 10 is the max number of workers
-    if MyInfo.getNumUnits(bc.UnitType.Worker,gc) < 10:
-        for d in directions:
-            if gc.can_replicate(worker.id, d):
-                #print(worker.id, ' Am replicating ')
-                #print('Number of workers is', MyInfo.getNumUnits(bc.UnitType.Worker, gc))
-                gc.replicate(worker.id, d)
-                return
-            # a child is born. we should initialize it as a Worker class. but...for now...whatever man
     
     dr = random.choice(directions)
     #last but not least, random walk
