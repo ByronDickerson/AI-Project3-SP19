@@ -31,7 +31,6 @@ random.seed(6137)
 gc.queue_research(bc.UnitType.Rocket)
 gc.queue_research(bc.UnitType.Worker)
 gc.queue_research(bc.UnitType.Ranger)
-gc.queue_research(bc.UnitType.Ranger)
 gc.queue_research(bc.UnitType.Knight)
 
 my_team = gc.team()
@@ -43,7 +42,6 @@ while True:
 
     # frequent try/catches are a good idea
     try:
-        
         # walk through our units:
         for unit in gc.my_units():
 
@@ -53,6 +51,9 @@ while True:
 
             if unit.unit_type == bc.UnitType.Ranger:
                 MyRanger.rangerLogic(unit, gc)
+
+            if unit.unit_type == bc.UnitType.Worker:
+                Factory.workerLogic(gc, unit, None)
 
                
             # first, let's look for nearby blueprints to work on
@@ -78,9 +79,25 @@ while True:
             if gc.karbonite() > bc.UnitType.Factory.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Factory, d):
                 gc.blueprint(unit.id, bc.UnitType.Factory, d)
             # and if that fails, try to move
+            
+            if unit.id == rocket_builder_id:
+                try:
+                    gc.build(unit.id, rocket_id)
+                except:
+                    continue
+                continue
+
+            if rocket_count < 1 and gc.karbonite() > bc.UnitType.Rocket.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Rocket, d):
+                gc.blueprint(unit.id, bc.UnitType.Rocket, d)
+                rocket_count += 1 #increment how many rockets we got...so we only build 1...
+                rocket_builder_id = unit.id
+                print('built a rocket!')
+                # move onto the next unit
+                continue
             elif gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
                 gc.move_robot(unit.id, d)
-        
+
+
     except Exception as e:
         print('Error:', e)
         # use this to show where the error was
