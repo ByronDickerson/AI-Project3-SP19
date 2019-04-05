@@ -121,7 +121,7 @@ def workerLogic(gc, unit):
             return
     
     for d in directions:
-        if gc.can_replicate(unit.id, d):
+        if gc.can_replicate(unit.id, d) and MyInfo.getNumUnits(bc.UnitType.Worker, gc) < 10:
             gc.replicate(unit.id, d)
             # a child is born. we should initialize it as a Worker class. but...for now...whatever man
     

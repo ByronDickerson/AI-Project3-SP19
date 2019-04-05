@@ -7,6 +7,7 @@ import time
 import MyInfo
 import Factory
 import MyRanger
+import Worker
 
 import os
 print(os.getcwd())
@@ -53,24 +54,9 @@ while True:
                 MyRanger.rangerLogic(unit, gc)
 
             if unit.unit_type == bc.UnitType.Worker:
-                Factory.workerLogic(gc, unit)
+                Worker.workerLogic(gc, unit)
 
-               
-            # first, let's look for nearby blueprints to work on
-            '''location = unit.location
-            if location.is_on_map():
-                nearby = gc.sense_nearby_units(location.map_location(), 2)
-                for other in nearby:
-                    if unit.unit_type == bc.UnitType.Worker and gc.can_build(unit.id, other.id):
-                        gc.build(unit.id, other.id)
-                        #print('built a factory!')
-                        # move onto the next unit
-                        continue
-                    if other.team != my_team and gc.is_attack_ready(unit.id) and gc.can_attack(unit.id, other.id):
-                        #print('attacked a thing!')
-                        gc.attack(unit.id, other.id)
-                        continue
-            '''
+            
             # okay, there weren't any dudes around
             # pick a random direction:
             d = random.choice(directions)
