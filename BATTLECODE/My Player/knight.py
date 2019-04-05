@@ -55,7 +55,7 @@ def knightAction(gc, unit):
 
                 # if no better options, move randomly
                 else:
-                    d = MyInfo.pathrand()
+                    d = random.choice(list(bc.Direction))
                     
                 # take actual movement
                 if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
