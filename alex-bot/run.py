@@ -42,6 +42,8 @@ while True:
 
     # frequent try/catches are a good idea
     try:
+
+        info = MyInfo()
         # walk through our units:
         for unit in gc.my_units():
 
@@ -53,7 +55,9 @@ while True:
                 MyRanger.rangerLogic(unit, gc)
 
             if unit.unit_type == bc.UnitType.Worker:
-                Factory.workerLogic(gc, unit)
+                worker = Factory.Worker(unit) #instantiate custom worker object
+                Factory.workerLogic(gc, worker,info)
+
 
                
             # first, let's look for nearby blueprints to work on

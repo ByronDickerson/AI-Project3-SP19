@@ -76,8 +76,9 @@ def launch(gc, marsMap, unitId):
 
 #basically jsut to hold some paramebers to go by
 class Worker:
-    def __init__(self, id):
-        self.ID = id
+    def __init__(self, u):
+        self.ID = u.id
+        self.unit = u
         self.isBuilding = False
         self.isImproved = False
         self.buildTargetID = None
@@ -89,8 +90,8 @@ class Worker:
 
 
 #input 'worker' is of the type Worker as defined in this file.
-def workerLogic(gc, unit):
-    worker = Worker(unit.id)
+def workerLogic(gc, worker,info):
+    
     #The worker will prioritize building
     #Then attacking
     #THen gathering resources
@@ -99,9 +100,10 @@ def workerLogic(gc, unit):
     if worker.isBuilding:
         if gc.can_build(worker.ID, worker.buildTargetID):
             gc.build(worker.ID, worker.buildTargetID)
+            print(worker.ID, ' Am still building this', worker.buildTargetID)
             return
     
-    location = unit.location
+    location = worker.unit.location #does this work?
     my_team = gc.team()
 
     #attack nearby enemy
@@ -110,21 +112,26 @@ def workerLogic(gc, unit):
         nearby = gc.sense_nearby_units(location.map_location(), 2)
         for other in nearby:
             if other.team != my_team and gc.is_attack_ready(worker.ID) and gc.can_attack(worker.ID, other.id):
-                print(worker.ID, 'attacking',other.id)
+                print(worker.ID, ' is attacking ',other.id)
                 gc.attack(worker.ID, other.id)
+                
                 return
                 
     directions = list(bc.Direction)
-    #d = random.choice(directions)
+    dr = random.choice(directions)
     
     for d in directions:
         if gc.can_harvest(worker.ID, d):
             gc.harvest(worker.ID, d)
+            print(worker.ID, ' Am harvesting stuff ')
             return
     
-    for d in directions:
-        if gc.can_replicate(worker.ID, d):
-            gc.replicate(worker.ID, d)
+    #wwhere 10 is the max number of workers
+    if info.getNumUnits(gc.UnitType.Worker,gc) < 10:
+        for d in directions:
+            if gc.can_replicate(worker.ID, d):
+                print(worker.ID, ' Am replicating ')
+                gc.replicate(worker.ID, d)
             # a child is born. we should initialize it as a Worker class. but...for now...whatever man
     
     #check if we can blueprint...then...do it..
@@ -139,6 +146,9 @@ def workerLogic(gc, unit):
         return
     '''    
     
+    #last but not least, random walk
+    if gc.can_move(worker.ID, dr):
+        gc.move_robot(worker.ID, dr)
     
 def blueprint(worker,directions,location,utype, gc):
     for d in directions:
