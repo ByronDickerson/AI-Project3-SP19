@@ -35,7 +35,6 @@ gc.queue_research(bc.UnitType.Knight)
 
 my_team = gc.team()
 
-
 while True:
     # We only support Python 3, which means brackets around print()
   ##### print('pyround:', gc.round(), 'time left:', gc.get_time_left_ms(), 'ms')
@@ -46,7 +45,7 @@ while True:
         
         # walk through our units:
         for unit in gc.my_units():
-
+            
             # first, factory logic
             if unit.unit_type == bc.UnitType.Factory:
                 Factory.factoryLogic(unit, gc)
@@ -55,8 +54,8 @@ while True:
                 MyRanger.rangerLogic(unit, gc)
 
             if unit.unit_type == bc.UnitType.Worker:
-                worker = Factory.Worker(unit) #instantiate custom worker object
-                Factory.workerLogic(gc, worker)
+                #worker = Factory.Worker(unit) #instantiate custom worker object
+                Factory.default_workerLogic(gc, unit)
             
             if unit.unit_type == bc.UnitType.Rocket:
                 Factory.rocketLogic(unit, gc)

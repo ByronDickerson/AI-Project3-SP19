@@ -11,7 +11,7 @@ def factoryLogic(unit, gc):
 
     #if it's not built then chillax
     if not unit.structure_is_built():
-        print('Build status is ', unit.health(), 'out of ', unit.max_heatlh())
+        print('Build status is ', str(unit.health), 'out of 300 health')
         return
 
     # Try to unload existing units from structure's garrison
@@ -82,6 +82,8 @@ def launch(gc, marsMap, unitId):
 	if gc.can_launch_rocket(this_rocket.id, destination):
 		gc.launch_rocket(this_rocket.id, destination)
 
+
+'''
 #basically jsut to hold some paramebers to go by
 class Worker:
     def __init__(self, u):
@@ -154,6 +156,90 @@ def workerLogic(gc, worker):
     #check if we can blueprint...then...do it..
     #this method doesnt exist yet. but it should handle like do we need one, do we have the funds, etc
     '''
+'''
+    if info.isRocketBlueprintTime():
+        blueprint(worker,directions,location,bc.UnitType.Rocket, gc)
+        return
+        
+    if info.isFactoryBlueprintTime():
+        blueprint(worker,directions,location,utype, gc)
+        return
+    '''
+'''    
+    dr = random.choice(directions)
+    #last but not least, random walk
+    trymove(gc,worker.ID, dr)
+    return
+    '''
+#sense nearby unbuilt things and then work on that
+def workerTryBuilding(gc, u ):
+    if u.location.is_on_map():
+        nearby = gc.sense_nearby_units(u.location.map_location(), 2)
+        for other in nearby:
+            if other.team == gc.team() and other.unit_type == bc.UnitType.Factory or other.unit_type == bc.UnitType.Rocket:
+                #print(worker.ID, ' is near a structure ',other.id)
+                if not other.structure_is_built() and gc.can_build(u.id,other.id):
+                    gc.build(u.id, other.id)
+                    print(u.id, ' Am still building this', other.id)
+                    return True
+                else:
+                    return False
+                    
+
+def default_workerLogic(gc, worker):
+    directions = MyInfo.directions
+    location = worker.location #does this work?
+    my_team = gc.team()
+
+    #The worker will prioritize building
+    #Then attacking
+    #THen gathering resources
+    #Then replicating
+    #Then wandering around
+    if workerTryBuilding(gc, worker):
+        return 
+
+    #up to 5 factories i guess
+    #try to blueprint
+    if MyInfo.getNumUnits(bc.UnitType.Factory, gc) < 5:
+        blueprint(worker,directions,location,bc.UnitType.Factory, gc)
+    
+
+
+    
+
+    #attack nearby enemy
+    #should probably have it flee but that is much harder to computer
+    if location.is_on_map():
+        nearby = gc.sense_nearby_units(location.map_location(), 2)
+        for other in nearby:
+            if other.team != my_team and gc.is_attack_ready(worker.id) and gc.can_attack(worker.id, other.id):
+                print(worker.id, ' is attacking ',other.id)
+                gc.attack(worker.id, other.id)
+                
+                return
+                
+   
+    
+    for d in directions:
+        if gc.can_harvest(worker.id, d):
+            gc.harvest(worker.id, d)
+            #print(worker.ID, ' Am harvesting stuff ')
+            return
+    
+    #wwhere 10 is the max number of workers
+    if MyInfo.getNumUnits(bc.UnitType.Worker,gc) < 10:
+        for d in directions:
+            if gc.can_replicate(worker.id, d):
+                print(worker.id, ' Am replicating ')
+                print('Number of workers is', MyInfo.getNumUnits(bc.UnitType.Worker, gc))
+                gc.replicate(worker.id, d)
+                return
+            # a child is born. we should initialize it as a Worker class. but...for now...whatever man
+    
+    #check if we can blueprint...then...do it..
+    #this method doesnt exist yet. but it should handle like do we need one, do we have the funds, etc
+    '''
     if info.isRocketBlueprintTime():
         blueprint(worker,directions,location,bc.UnitType.Rocket, gc)
         return
@@ -164,9 +250,10 @@ def workerLogic(gc, worker):
     '''    
     dr = random.choice(directions)
     #last but not least, random walk
-    trymove(gc,worker.ID, dr)
+    trymove(gc,worker.id, dr)
     return
-    
+
+
 #custom move function for clarity. completely unnecessary but whatver
 def trymove(gc, id, dir):
     if gc.is_move_ready(id) and gc.can_move(id, dir):
@@ -174,11 +261,8 @@ def trymove(gc, id, dir):
 
 def blueprint(worker,directions,location,utype, gc):
     for d in directions:
-            if gc.can_blueprint(worker.ID, utype,d):
-                gc.blueprint(worker.ID, utype,d)
-                for u in gc.sense_nearby_units(location.map_location(), 2):
-                    if u.unit_type == utype:
-                        worker.newBuildTarget(u)
+            if gc.can_blueprint(worker.id, utype,d):
+                gc.blueprint(worker.id, utype,d)
                 return
     
     
