@@ -17,21 +17,21 @@ def knightAction(gc, unit):
     if location.is_on_map():
 
         # list all units within attacking range
-        shortrange = gc.sense_nearby_units(location, 2)
+        shortrange = gc.sense_nearby_units(location.map_location(), 2)
         
         # for units within attack range
         for other in shortrange:            
             # if the other unit is an enemy and knight can attack
             if MyInfo.enemy(other) and gc.is_attack_ready(unit.id):
                 #attack
-                print('A Knight Attacks')
+                print('attacked a thing!')
                 gc.attack(unit.id, other.id)
         # else no enemies near, carry on
         
         # if javelin is available and ready to use
         if gc.is_javelin_ready(unit.id):
             # list all units within javelin range
-            midrange = gc.sense_nearby_units(location, 10)
+            midrange = gc.sense_nearby_units(location.map_location(), 10)
 
             #for units within javelin range
             for other in midrange:
@@ -43,7 +43,7 @@ def knightAction(gc, unit):
         # if unit can move
         if gc.is_move_ready(unit.id):
             # list all units within sight range
-            longrange = gc.sense_nearby_units(location, 50)
+            longrange = gc.sense_nearby_units(location.map_location(), 50)
 
             for other in longrange:
                 # does this unit have low health and has it located a friendly healer?
@@ -55,7 +55,7 @@ def knightAction(gc, unit):
 
                 # if no better options, move randomly
                 else:
-                    d = random.choice(list(bc.Direction))
+                    d = MyInfo.pathrand()
                     
                 # take actual movement
                 if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
