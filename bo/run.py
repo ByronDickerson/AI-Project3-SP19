@@ -7,19 +7,8 @@ import time
 import os
 print(os.getcwd())
 
-class Rocket:
-    
-    def __init__(self, id):
-        self.id = id
-        self.health = 0
-        self.max_health = 200
-    
-    
-class Worker:
-
-    def __init__(self, id):
-        self.id = id
-    
+import Factory
+import MyRanger
 
 print("pystarting")
 
@@ -44,7 +33,7 @@ gc.queue_research(bc.UnitType.Knight)
 my_team = gc.team()
 
 
-
+'''
 rocket_count = 0
 rocket_builder_id = 0
 rocket_id = 0
@@ -82,6 +71,8 @@ class Info:
 
 
 
+'''
+
 
 while True:
     # We only support Python 3, which means brackets around print()
@@ -89,44 +80,19 @@ while True:
 
     # frequent try/catches are a good idea
     try:
-        for unit in teamrocket:
-            #rocket logic
-            #while the rocket is being built, build it
-            #once it's done being built...set a flag or something to get everyone in the rocket            
-            
-            if unit.unit_type == bc.UnitType.Rocket:
-                rocket_id = unit.id
-                print('I am a rocket! heehe!')
-                print('My built status is...' + str((unit.structure_is_built())))
-                print('health:' + str(unit.health) + ' out of ' + str(unit.max_health))
-            
-        for unit in teamscavenge:
-            #workers and whatever
-            
-        for unit in teambuildfactory:
-            #build...that...
-            
-        for unit in unassigned:
-            #uhh assign em
-            
-            if type(unit) == Worker:
-                
-                d = random.choice(directions)
-                if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
-                    gc.move_robot(1, d)
-            
-                
-                
-            
-                
-                
-                
-                
-                
-                
-            
+        for unit in gc.my_units():    
             # first, factory logic
             # If i am a factory...
+            
+            if unit.unit_type == bc.UnitType.Factory:
+                Factory.factoryLogic(unit, gc)
+
+            if unit.unit_type == bc.UnitType.Ranger:
+                MyRanger.rangerLogic(unit, gc)
+                
+            if unit.unit_type == bc.UnitType.Worker:
+                Factory.workerLogic(gc, unit, None)
+            
             '''
             
             if unit.unit_type == bc.UnitType.Factory:
