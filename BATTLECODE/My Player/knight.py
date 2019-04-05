@@ -4,7 +4,7 @@
 # retreat to healer if low
 import battlecode as bc
 import random
-import toolbox as tb
+import MyInfo
 
 # maybe consider also coding worker resource location
 
@@ -22,7 +22,7 @@ def knightAction(gc, unit):
         # for units within attack range
         for other in shortrange:            
             # if the other unit is an enemy and knight can attack
-            if tb.enemy(gc, other) and gc.is_attack_ready(unit.id):
+            if MyInfo.enemy(other) and gc.is_attack_ready(unit.id):
                 #attack
                 print('attacked a thing!')
                 gc.attack(unit.id, other.id)
@@ -36,7 +36,7 @@ def knightAction(gc, unit):
             #for units within javelin range
             for other in midrange:
                 # if enemy detected, attack
-                if tb.enemy(gc, other):
+                if MyInfo.enemy(other):
                     gc.javelin(unit.id, other.id)
         # else no javelin, carry on
 
@@ -47,15 +47,15 @@ def knightAction(gc, unit):
 
             for other in longrange:
                 # does this unit have low health and has it located a friendly healer?
-                seekhealer = tb.lowHealth(unit) and (not tb.enemy(gc, other)) and other.unit_type == bc.UnitType.Healer
+                seekhealer = MyInfo.lowHealth(unit) and (not MyInfo.enemy(other)) and other.unit_type == bc.UnitType.Healer
                 
                 # if enemy or a needed healer is spotted, go towards that unit
-                if seekhealer or tb.enemy(gc, other):
-                    d = tb.pathfind(bc, unit, other)                   
+                if seekhealer or MyInfo.enemy(other):
+                    d = MyInfo.pathfind(unit, other)                   
 
                 # if no better options, move randomly
                 else:
-                    d = tb.pathrand(bc)
+                    d = MyInfo.pathrand()
                     
                 # take actual movement
                 if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
