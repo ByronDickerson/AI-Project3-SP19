@@ -11,6 +11,7 @@ def getNumUnits(unitType, gcParam):
     numK = 0
     numH = 0
     numF = 0
+    numRockets = 0
 
     for unit in gc.my_units():
         if unit.unit_type == bc.UnitType.Ranger:
@@ -21,6 +22,8 @@ def getNumUnits(unitType, gcParam):
             numH+= 1
         elif unit.unit_type == bc.UnitType.Factory:
             numF+= 1
+        elif unit.unit_type == bc.UnitType.Rocket:
+            numRockets+= 1
 
 
     if unitType == bc.UnitType.Ranger:
@@ -31,6 +34,8 @@ def getNumUnits(unitType, gcParam):
         return numH
     elif unitType == bc.UnitType.Factory:
         return numF
+    elif unitType == bc.UnitType.Rocket:
+        return numRockets
 
 def nearbyEnemies(unit, gcParam):
     gc = gcParam

@@ -81,7 +81,7 @@ while True:
             # and if that fails, try to move
             
 
-            if rocket_count < 1 and gc.karbonite() > bc.UnitType.Rocket.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Rocket, d):
+            if MyInfo.getNumUnits(bc.UnitType.Rocket, gc) < 1 and gc.karbonite() > bc.UnitType.Rocket.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Rocket, d):
                 if unit.id == rocket_builder_id:
                     try:
                         gc.build(unit.id, rocket_id)
