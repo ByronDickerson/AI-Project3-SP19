@@ -1,3 +1,4 @@
+#The info file was inspired from Slink3's extra info.py
 import battlecode as bc
 
 gc = 0

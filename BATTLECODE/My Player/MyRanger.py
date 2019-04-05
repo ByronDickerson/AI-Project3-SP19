@@ -6,6 +6,7 @@ possibleDirections = list(bc.Direction)
 unit = 0
 gc = 0
 
+#I used Slink3 and TKUS's ranger classes and tried to combine them into this
 def rangerLogic(unitParam, gcParam):
     global unit
     global gc

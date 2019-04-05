@@ -3,14 +3,10 @@ import random
 import MyInfo
 
 possibleDirections = list(bc.Direction)
-unit = 0
-gc = 0
 
-def factoryLogic(unitParam, gcParam):
-    global unit
-    global gc
-    unit = unitParam
-    gc = gcParam
+
+def factoryLogic(unit, gc):
+
     counter = [1, 2, 3]
     count = random.choice(counter)
     if not unit.structure_is_built():
@@ -101,7 +97,7 @@ def workerLogic(gc, worker, info):
     #THen gathering resources
     #Then replicating
     #Then wandering around
-    if worker.isBuilding:
+    if Worker.isBuilding:
         if gc.can_build(worker.ID, worker.buildTargetID):
             gc.build(worker.ID, worker.buildTargetID)
             return
