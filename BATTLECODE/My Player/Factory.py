@@ -23,7 +23,7 @@ def factoryLogic(unitParam, gcParam):
             return
 
     if gc.round()<675:
-        if count==1 and MyInfo.getNumUnits(bc.UnitType.Knight, gc)< 5:
+        if count==1 and MyInfo.getNumUnits(bc.UnitType.Knight, gc)< 10:
             if gc.can_produce_robot(unit.id, bc.UnitType.Knight):
                 gc.produce_robot(unit.id, bc.UnitType.Knight)
                 return

@@ -55,7 +55,7 @@ while True:
             if unit.unit_type == bc.UnitType.Ranger:
                 MyRanger.rangerLogic(unit, gc)
 
-                            
+               
             # first, let's look for nearby blueprints to work on
             location = unit.location
             if location.is_on_map():
