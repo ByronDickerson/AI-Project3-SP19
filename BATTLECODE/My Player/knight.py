@@ -24,7 +24,7 @@ def knightAction(gc, unit):
             # if the other unit is an enemy and knight can attack
             if MyInfo.enemy(other) and gc.is_attack_ready(unit.id):
                 #attack
-                print('A Knight Attacks')
+                print('attacked a thing!')
                 gc.attack(unit.id, other.id)
         # else no enemies near, carry on
         
@@ -55,7 +55,7 @@ def knightAction(gc, unit):
 
                 # if no better options, move randomly
                 else:
-                    d = random.choice(list(bc.Direction))
+                    d = MyInfo.pathrand()
                     
                 # take actual movement
                 if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):

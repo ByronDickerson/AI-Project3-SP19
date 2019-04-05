@@ -46,7 +46,7 @@ while True:
     try:
         # walk through our units:
         for unit in gc.my_units():
-
+            d = random.choice(directions)    
             # first, factory logic
             if unit.unit_type == bc.UnitType.Factory:
                 Factory.factoryLogic(unit, gc)
@@ -60,17 +60,11 @@ while True:
             elif unit.unit_type == bc.UnitType.Knight:
                 knight.knightAction(gc, unit)
                 
+            elif unit.unit_type == bc.UnitType.Rocket:
+                Worker.rocketLogic(unit, gc)
+                
             elif gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
                 gc.move_robot(unit.id, d)
-            # okay, there weren't any dudes around
-            # pick a random direction:
-            d = random.choice(directions)
-
-            # or, try to build a factory:
-            if gc.karbonite() > bc.UnitType.Factory.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Factory, d):
-                if MyInfo.getNumUnits(bc.UnitType.Factory, gc) < 10:
-                    gc.blueprint(unit.id, bc.UnitType.Factory, d)
-            # and if that fails, try to move
             
 
     except Exception as e:
