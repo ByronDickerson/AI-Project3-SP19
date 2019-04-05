@@ -24,7 +24,7 @@ directions = list(bc.Direction)
 # It's a good idea to try to keep your bots deterministic, to make debugging easier.
 # determinism isn't required, but it means that the same things will happen in every thing you run,
 # aside from turns taking slightly different amounts of time due to noise.
-random.seed(6137)
+random.seed(6138)
 
 # let's start off with some research!
 # we can queue as much as we want.
@@ -55,7 +55,7 @@ while True:
 
             if unit.unit_type == bc.UnitType.Worker:
                 #worker = Factory.Worker(unit) #instantiate custom worker object
-                Factory.default_workerLogic(gc, unit)
+                Factory.workerLogic(gc, unit)
             
             if unit.unit_type == bc.UnitType.Rocket:
                 Factory.rocketLogic(unit, gc)
