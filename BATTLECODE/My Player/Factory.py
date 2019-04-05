@@ -24,7 +24,7 @@ def factoryLogic(unit, gc):
                 gc.produce_robot(unit.id, bc.UnitType.Knight)
                 return
 
-        elif count==2 and MyInfo.getNumUnits(bc.UnitType.Ranger, gc)< 5:
+        elif count==2 and MyInfo.getNumUnits(bc.UnitType.Ranger, gc)< 7:
             if gc.can_produce_robot(unit.id, bc.UnitType.Ranger): 
                 gc.produce_robot(unit.id, bc.UnitType.Ranger)
                 return
