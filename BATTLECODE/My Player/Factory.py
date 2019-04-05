@@ -90,42 +90,39 @@ class Worker:
 
 
 #input 'worker' is of the type Worker as defined in this file.
-def workerLogic(gc, worker, info):
-    
+def workerLogic(gc, unit):
+
     #The worker will prioritize building
     #Then attacking
     #THen gathering resources
     #Then replicating
     #Then wandering around
-    if Worker.isBuilding:
-        if gc.can_build(worker.ID, worker.buildTargetID):
-            gc.build(worker.ID, worker.buildTargetID)
-            return
     
-    location = worker.location
-    my_team = gc.team()
-
-    #attack nearby enemy
-    #should probably have it flee but that is much harder to computer
+    location = unit.location
     if location.is_on_map():
         nearby = gc.sense_nearby_units(location.map_location(), 2)
         for other in nearby:
-            if other.team != my_team and gc.is_attack_ready(worker.ID) and gc.can_attack(worker.ID, other.id):
-                print(worker.ID, 'attacking',other.id)
-                gc.attack(worker.ID, other.id)
-                return
+            if unit.unit_type == bc.UnitType.Worker and gc.can_build(unit.id, other.id):
+                gc.build(unit.id, other.id)
+                print('built a factory!')
+                # move onto the next unit
+                continue
+            if other.team != gc.team() and gc.is_attack_ready(unit.id) and gc.can_attack(unit.id, other.id):
+                print('attacked a thing!')
+                gc.attack(unit.id, other.id)
+                continue
                 
     directions = list(bc.Direction)
     #d = random.choice(directions)
     
     for d in directions:
-        if gc.can_harvest(worker.ID, d):
-            gc.harvest(worker.ID, d)
+        if gc.can_harvest(unit.id, d):
+            gc.harvest(unit.id, d)
             return
     
     for d in directions:
-        if gc.can_replicate(worker.ID, d):
-            gc.replicate(worker.ID, d)
+        if gc.can_replicate(unit.id, d):
+            gc.replicate(unit.id, d)
             # a child is born. we should initialize it as a Worker class. but...for now...whatever man
     
     #check if we can blueprint...then...do it..
@@ -143,8 +140,8 @@ def workerLogic(gc, worker, info):
     
 def blueprint(worker,directions,location,utype):
     for d in directions:
-            if gc.can_blueprint(worker.ID, utype,d):
-                gc.blueprint(worker.ID, utype,d)
+            if gc.can_blueprint(worker.id, utype,d):
+                gc.blueprint(worker.id, utype,d)
                 for u in gc.sense_nearby_units(location.map_location()):
                     if u.unit_type == utype:
                         worker.newBuildTarget(u)
