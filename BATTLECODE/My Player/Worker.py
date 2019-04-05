@@ -107,7 +107,7 @@ def workerLogic(gc, worker):
     #up to 5 factories i guess
     #try to blueprint
 
-    if MyInfo.getNumUnits(bc.UnitType.Rocket, gc) < 3:
+    if MyInfo.getNumUnits(bc.UnitType.Rocket, gc) < 3 and gc.round() >= 125:
         blueprint(worker, directions, location, bc.UnitType.Rocket, gc)
 
     if MyInfo.getNumUnits(bc.UnitType.Factory, gc) < 5:
