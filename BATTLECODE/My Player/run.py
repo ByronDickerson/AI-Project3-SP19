@@ -46,7 +46,7 @@ while True:
     try:
         # walk through our units:
         for unit in gc.my_units():
-
+            d = random.choice(directions)    
             # first, factory logic
             if unit.unit_type == bc.UnitType.Factory:
                 Factory.factoryLogic(unit, gc)
