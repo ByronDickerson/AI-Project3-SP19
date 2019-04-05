@@ -3,6 +3,9 @@ import battlecode as bc
 
 gc = 0
 
+directions = list(bc.Direction)
+
+
 def getNumUnits(unitType, gcParam):
     global gc
     gc = gcParam
@@ -11,6 +14,7 @@ def getNumUnits(unitType, gcParam):
     numK = 0
     numH = 0
     numF = 0
+    numW = 0
     numRockets = 0
 
     for unit in gc.my_units():
@@ -24,6 +28,8 @@ def getNumUnits(unitType, gcParam):
             numF+= 1
         elif unit.unit_type == bc.UnitType.Rocket:
             numRockets+= 1
+        elif unit.unit_type == bc.UnitType.Worker:
+            numW+= 1
 
 
     if unitType == bc.UnitType.Ranger:
@@ -36,6 +42,8 @@ def getNumUnits(unitType, gcParam):
         return numF
     elif unitType == bc.UnitType.Rocket:
         return numRockets
+    elif unitType == bc.UnitType.Worker:
+        return numW
 
 def nearbyEnemies(unit, gcParam):
     gc = gcParam

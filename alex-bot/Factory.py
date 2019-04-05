@@ -8,29 +8,36 @@ possibleDirections = list(bc.Direction)
 def factoryLogic(unit, gc):
     counter = [1, 2, 3]
     count = random.choice(counter)
+
+    #if it's not built then chillax
     if not unit.structure_is_built():
+        print('Build status is ', unit.health(), 'out of ', unit.max_heatlh())
         return
 
     # Try to unload existing units from structure's garrison
     for direction in possibleDirections:
         if gc.can_unload(unit.id, direction):
             gc.unload(unit.id, direction)
+            print(unit.id, " Factory just unloaded a..something ")
             return
-
+    #up until round 675 we will produce random bots
     if gc.round()<675:
         if count==1 and MyInfo.getNumUnits(bc.UnitType.Knight, gc)< 10:
             if gc.can_produce_robot(unit.id, bc.UnitType.Knight):
                 gc.produce_robot(unit.id, bc.UnitType.Knight)
+                print(unit.id, " Factory making a knight ")
                 return
 
         elif count==2 and MyInfo.getNumUnits(bc.UnitType.Ranger, gc)< 5:
             if gc.can_produce_robot(unit.id, bc.UnitType.Ranger): 
                 gc.produce_robot(unit.id, bc.UnitType.Ranger)
+                print(unit.id, " Factory making a ranger ")
                 return
 
         elif count==3 and MyInfo.getNumUnits(bc.UnitType.Healer, gc)< 5:
             if gc.can_produce_robot(unit.id, bc.UnitType.Healer):
                 gc.produce_robot(unit.id, bc.UnitType.Healer)
+                print(unit.id, " Factory making a healer ")
                 return
     return
 
@@ -38,6 +45,7 @@ def rocketLogic(rocket, gc):
     
     #if it isnt done being built then chill out
     if not rocket.structure_is_built():
+        
         return
     
     #how many already in?
@@ -91,7 +99,10 @@ class Worker:
 
 #input 'worker' is of the type Worker as defined in this file.
 def workerLogic(gc, worker):
-    
+    directions = MyInfo.directions
+    location = worker.unit.location #does this work?
+    my_team = gc.team()
+
     #The worker will prioritize building
     #Then attacking
     #THen gathering resources
@@ -102,9 +113,14 @@ def workerLogic(gc, worker):
             gc.build(worker.ID, worker.buildTargetID)
             print(worker.ID, ' Am still building this', worker.buildTargetID)
             return
+    #up to 5 factories i guess
+    #try to blueprint
+    if MyInfo.getNumUnits(bc.UnitType.Factory, gc) < 5:
+        blueprint(worker,directions,location,bc.UnitType.Factory, gc)
     
-    location = worker.unit.location #does this work?
-    my_team = gc.team()
+
+
+    
 
     #attack nearby enemy
     #should probably have it flee but that is much harder to computer
@@ -117,21 +133,22 @@ def workerLogic(gc, worker):
                 
                 return
                 
-    directions = list(bc.Direction)
-    dr = random.choice(directions)
+   
     
     for d in directions:
         if gc.can_harvest(worker.ID, d):
             gc.harvest(worker.ID, d)
-            print(worker.ID, ' Am harvesting stuff ')
+            #print(worker.ID, ' Am harvesting stuff ')
             return
     
     #wwhere 10 is the max number of workers
-    if MyInfo.getNumUnits(gc.UnitType.Worker,gc) < 10:
+    if MyInfo.getNumUnits(bc.UnitType.Worker,gc) < 10:
         for d in directions:
             if gc.can_replicate(worker.ID, d):
                 print(worker.ID, ' Am replicating ')
+                print('Number of workers is', MyInfo.getNumUnits(bc.UnitType.Worker, gc))
                 gc.replicate(worker.ID, d)
+                return
             # a child is born. we should initialize it as a Worker class. but...for now...whatever man
     
     #check if we can blueprint...then...do it..
@@ -145,16 +162,21 @@ def workerLogic(gc, worker):
         blueprint(worker,directions,location,utype, gc)
         return
     '''    
-    
+    dr = random.choice(directions)
     #last but not least, random walk
-    if gc.can_move(worker.ID, dr):
-        gc.move_robot(worker.ID, dr)
+    trymove(gc,worker.ID, dr)
+    return
     
+#custom move function for clarity. completely unnecessary but whatver
+def trymove(gc, id, dir):
+    if gc.is_move_ready(id) and gc.can_move(id, dir):
+        gc.move_robot(id,dir)
+
 def blueprint(worker,directions,location,utype, gc):
     for d in directions:
             if gc.can_blueprint(worker.ID, utype,d):
                 gc.blueprint(worker.ID, utype,d)
-                for u in gc.sense_nearby_units(location.map_location()):
+                for u in gc.sense_nearby_units(location.map_location(), 2):
                     if u.unit_type == utype:
                         worker.newBuildTarget(u)
                 return

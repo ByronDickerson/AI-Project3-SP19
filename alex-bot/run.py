@@ -57,7 +57,9 @@ while True:
             if unit.unit_type == bc.UnitType.Worker:
                 worker = Factory.Worker(unit) #instantiate custom worker object
                 Factory.workerLogic(gc, worker)
-
+            
+            if unit.unit_type == bc.UnitType.Rocket:
+                Factory.rocketLogic(unit, gc)
 
                
             # first, let's look for nearby blueprints to work on
@@ -74,10 +76,10 @@ while True:
                         #print('attacked a thing!')
                         gc.attack(unit.id, other.id)
                         continue
-            '''
+            
             # okay, there weren't any dudes around
             # pick a random direction:
-            d = random.choice(directions)
+            #d = random.choice(directions)
 
             # or, try to build a factory:
             if gc.karbonite() > bc.UnitType.Factory.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Factory, d):
@@ -101,6 +103,7 @@ while True:
                 continue
             elif gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
                 gc.move_robot(unit.id, d)
+                '''
 
     except Exception as e:
         print('Error:', e)
