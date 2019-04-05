@@ -3,6 +3,7 @@ import battlecode as bc
 import random
 
 gc = 0
+directions = list(bc.Direction)
 
 def getNumUnits(unitType, gcParam):
     global gc

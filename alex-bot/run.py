@@ -7,6 +7,7 @@ import time
 import MyInfo
 import Factory
 import MyRanger
+import Worker
 
 import os
 print(os.getcwd())
