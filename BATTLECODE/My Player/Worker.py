@@ -123,9 +123,8 @@ def workerLogic(gc, worker):
         nearby = gc.sense_nearby_units(location.map_location(), 2)
         for other in nearby:
             if other.team != my_team and gc.is_attack_ready(worker.id) and gc.can_attack(worker.id, other.id):
-                #print(worker.id, ' is attacking ',other.id)
                 gc.attack(worker.id, other.id)
-                
+                print('A Worker Attacks!')
                 return
                 
    
