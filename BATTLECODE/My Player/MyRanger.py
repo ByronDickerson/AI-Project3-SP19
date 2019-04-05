@@ -41,6 +41,7 @@ def rangerLogic(unitParam, gcParam):
         for enemy in enemies:
             if gc.can_attack(unit.id, enemy.id) and gc.is_attack_ready(unit.id):
                 gc.attack(unit.id, enemy.id)
+                print("A Ranger Attacks")
                 return
 
     #Nearby Enemy Location

@@ -33,7 +33,7 @@ def workerLogic(gc, unit):
         for other in nearby:
             if gc.can_build(unit.id, other.id) and MyInfo.getNumUnits(bc.UnitType.Factory, gc) < 8:
                 gc.build(unit.id, other.id)
-                print('built a factory!')
+                ##print('built a factory!')
                 # move onto the next unit
                 continue
             if other.team != gc.team() and gc.is_attack_ready(unit.id) and gc.can_attack(unit.id, other.id):

@@ -8,6 +8,7 @@ import MyInfo
 import Factory
 import MyRanger
 import Worker
+import knight
 
 import os
 print(os.getcwd())
@@ -39,7 +40,7 @@ my_team = gc.team()
 
 while True:
     # We only support Python 3, which means brackets around print()
-    print('pyround:', gc.round(), 'time left:', gc.get_time_left_ms(), 'ms')
+    ####print('pyround:', gc.round(), 'time left:', gc.get_time_left_ms(), 'ms')
 
     # frequent try/catches are a good idea
     try:
@@ -55,7 +56,10 @@ while True:
 
             elif unit.unit_type == bc.UnitType.Worker:
                 Worker.workerLogic(gc, unit)
-
+            
+            elif unit.unit_type == bc.UnitType.Knight:
+                knight.knightAction(gc, unit)
+                
             elif gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
                 gc.move_robot(unit.id, d)
             # okay, there weren't any dudes around
