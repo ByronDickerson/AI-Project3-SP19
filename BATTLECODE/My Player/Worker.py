@@ -1,6 +1,7 @@
 #The info file was inspired from Slink3's extra info.py
 import battlecode as bc
 import MyInfo
+
 #basically jsut to hold some paramebers to go by
 class Worker:
     def __init__(self, id):
@@ -22,6 +23,9 @@ def workerLogic(gc, unit):
     #THen gathering resources
     #Then replicating
     #Then wandering around
+
+    directions = list(bc.Direction)
+    #curD = random.choice(directions)
     
     location = unit.location
     if location.is_on_map():
@@ -36,10 +40,8 @@ def workerLogic(gc, unit):
                 print('attacked a thing!')
                 gc.attack(unit.id, other.id)
                 continue
+
                 
-    directions = list(bc.Direction)
-    #d = random.choice(directions)
-    
     for d in directions:
         if gc.can_harvest(unit.id, d):
             gc.harvest(unit.id, d)
@@ -63,7 +65,11 @@ def workerLogic(gc, unit):
         gc.blueprint(unit.id, bc.UnitType.Rocket, d)
         print('built a rocket!')
         # move onto the next unit
-        continue
+
+    for d in directions:
+        if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
+            gc.move_robot(unit.id, d)
+            continue
 
 def rocketLogic(rocket, gc, info):
     
