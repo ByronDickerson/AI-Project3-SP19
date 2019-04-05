@@ -1,0 +1,2 @@
+class WorkerMove(object):
+    pass

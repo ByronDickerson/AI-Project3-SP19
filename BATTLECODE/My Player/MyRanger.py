@@ -1,16 +1,18 @@
 import battlecode as bc 
+import MyInfo
 import random
 
 possibleDirections = list(bc.Direction)
 unit = 0
 gc = 0
 
+#I used Slink3 and TKUS's ranger classes and tried to combine them into this
 def rangerLogic(unitParam, gcParam):
     global unit
     global gc
     unit = unitParam
     gc = gcParam
-
+    
     # If ranger is in garrison or space, then do nothing
     if unit.location.is_in_garrison():
         return
@@ -30,14 +32,7 @@ def rangerLogic(unitParam, gcParam):
     unitLocation = unit.location.map_location()
 
     #Nearby Enemy Location
-    enemies = []
-
-    #If we're red, look for blue units, else look for red units
-    if unit.team == bc.Team.Red:
-        enemies = gc.sense_nearby_units_by_team(unit.location.map_location(), 2, bc.Team.Blue)
-    else:
-        enemies = gc.sense_nearby_units_by_team(unit.location.map_location(), 2, bc.Team.Red)
-
+    enemies = MyInfo.nearbyEnemies(unit, gc)
 
     #If there are enemies, attack
     if len(enemies)>0:
@@ -45,13 +40,13 @@ def rangerLogic(unitParam, gcParam):
            #try to snipe enemies
             if unit.is_ability_unlocked():
                 if gc.is_begin_snipe_ready(unit.id):
-                    for enemy in enemies:
-                        if gc.can_begin_snipe(unit.id, enemy):
-                            gc.begin_snipe(unit.id, enemy)
-                            return
+                    if gc.can_begin_snipe(unit.id, enemy.location.map_location()):
+                        gc.begin_snipe(unit.id, enemy.location.map_location())
+                        return
 
-            elif gc.can_attack(unit.id, enemy.id) and unit.attack_heat() < 10 :
+            elif gc.can_attack(unit.id, enemy.id) and gc.is_attack_ready(unit.id) :
                 gc.attack(unit.id, enemy.id)
+                print("A Ranger Attacked")
     else:
         # Move randomly
         for direction in possibleDirections:
