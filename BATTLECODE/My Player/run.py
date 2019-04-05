@@ -68,16 +68,15 @@ while True:
             
 
             if MyInfo.getNumUnits(bc.UnitType.Rocket, gc) < 1 and gc.karbonite() > bc.UnitType.Rocket.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Rocket, d):
-                if unit.id == rocket_builder_id:
+                if unit.unit_type == bc.UnitType.Worker:
                     try:
                         gc.build(unit.id, rocket_id)
+                        print("building Rocket!")
                     except:
                         continue
                     continue
 
                 gc.blueprint(unit.id, bc.UnitType.Rocket, d)
-                rocket_count += 1 #increment how many rockets we got...so we only build 1...
-                rocket_builder_id = unit.id
                 print('built a rocket!')
                 # move onto the next unit
                 continue

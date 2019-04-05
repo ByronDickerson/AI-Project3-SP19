@@ -49,25 +49,44 @@ def workerLogic(gc, unit):
         if gc.can_replicate(unit.id, d) and MyInfo.getNumUnits(bc.UnitType.Worker, gc) < 10:
             gc.replicate(unit.id, d)
             # a child is born. we should initialize it as a Worker class. but...for now...whatever man
+
+def rocketLogic(rocket, gc, info):
     
-    #check if we can blueprint...then...do it..
-    #this method doesnt exist yet. but it should handle like do we need one, do we have the funds, etc
-    '''
-    if info.isRocketBlueprintTime():
-        blueprint(worker,directions,location,bc.UnitType.Rocket)
+    #if it isnt done being built then chill out
+    if not rocket.structure_is_built():
         return
+    
+    #how many already in?
+    occupants = len(rocket.structure_garrison())     
+    
+    #if its about to flood and we got some passengers...just go
+    #also launch if you're full
+    if (gc.round() >= 700 and occupants > 0) or (occupants == 8):
+        #from slink3
+        launch(gc, gc.starting_map(bc.Planet.Mars), rocket.id)
         
-    if info.isFactoryBlueprintTime():
-        blueprint(worker,directions,location,utype)
-        return
-    '''    
-    
-    
-def blueprint(worker,directions,location,utype):
-    for d in directions:
-            if gc.can_blueprint(worker.id, utype,d):
-                gc.blueprint(worker.id, utype,d)
-                for u in gc.sense_nearby_units(location.map_location()):
-                    if u.unit_type == utype:
-                        worker.newBuildTarget(u)
+    else:
+        #otherwise, load some boys. 
+        #rocket chooses who to load; it takes priority
+        nearby = nearby = gc.sense_nearby_units(location.map_location(), 2)
+        for other in nearby:
+            if gc.can_load(rocket.id,other.id):
+                gc.load(rocket.id, other.id)
                 return
+    
+#helper to rocket
+#copied entirely from the skid3 guy or whatever the name is
+def launch(gc, marsMap, unitId):
+	if gc.unit(unitId).structure_is_built():
+		this_rocket = gc.unit(unitId)
+	else:
+		return
+	garrison = this_rocket.structure_garrison()
+
+	#destination = computeOptimalLandingPlace(marsMap)
+	destination = bc.MapLocation(bc.Planet.Mars, random.randint(0, marsMap.width), random.randint(0, marsMap.height))
+	while(not marsMap.is_passable_terrain_at(destination)):
+		destination = bc.MapLocation(bc.Planet.Mars, random.randint(0, marsMap.width), random.randint(0, marsMap.height))
+	if gc.can_launch_rocket(this_rocket.id, destination):
+		gc.launch_rocket(this_rocket.id, destination)
+
