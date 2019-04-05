@@ -39,7 +39,7 @@ my_team = gc.team()
 
 while True:
     # We only support Python 3, which means brackets around print()
-  ##### print('pyround:', gc.round(), 'time left:', gc.get_time_left_ms(), 'ms')
+    print('pyround:', gc.round(), 'time left:', gc.get_time_left_ms(), 'ms')
 
     # frequent try/catches are a good idea
     try:

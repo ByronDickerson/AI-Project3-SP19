@@ -31,13 +31,13 @@ def workerLogic(gc, unit):
     if location.is_on_map():
         nearby = gc.sense_nearby_units(location.map_location(), 2)
         for other in nearby:
-            if unit.unit_type == bc.UnitType.Worker and gc.can_build(unit.id, other.id):
+            if gc.can_build(unit.id, other.id) and MyInfo.getNumUnits(bc.UnitType.Factory, gc) < 8:
                 gc.build(unit.id, other.id)
                 print('built a factory!')
                 # move onto the next unit
                 continue
             if other.team != gc.team() and gc.is_attack_ready(unit.id) and gc.can_attack(unit.id, other.id):
-                print('attacked a thing!')
+                print('A Worker Attacks!')
                 gc.attack(unit.id, other.id)
                 continue
 
