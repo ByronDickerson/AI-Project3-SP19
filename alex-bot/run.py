@@ -55,10 +55,10 @@ while True:
 
             if unit.unit_type == bc.UnitType.Worker:
                 #worker = Factory.Worker(unit) #instantiate custom worker object
-                Factory.workerLogic(gc, unit)
+                Worker.workerLogic(gc, unit)
             
             if unit.unit_type == bc.UnitType.Rocket:
-                Factory.rocketLogic(unit, gc)
+                Worker.rocketLogic(unit, gc)
 
                
             # first, let's look for nearby blueprints to work on

@@ -74,94 +74,8 @@ def launch(gc, marsMap, unitId):
         print('Uh Oh:', e)
         print('Invalid destination is ', destination)
         print('mars size is ',marsMap.width, 'x',marsMap.height)
-'''
-#basically jsut to hold some paramebers to go by
-class Worker:
-    def __init__(self, u):
-        self.ID = u.id
-        self.unit = u
-        self.isBuilding = False
-        self.isImproved = False
-        self.buildTargetID = None
-        
-    
-    def newBuildTarget(self,tgt):
-        self.buildTargetID = tgt.id
-        self.isBuilding = True
 
 
-#input 'worker' is of the type Worker as defined in this file.
-def workerLogic(gc, worker):
-    directions = MyInfo.directions
-    location = worker.unit.location #does this work?
-    my_team = gc.team()
-
-    #The worker will prioritize building
-    #Then attacking
-    #THen gathering resources
-    #Then replicating
-    #Then wandering around
-    if worker.isBuilding:
-        if gc.can_build(worker.ID, worker.buildTargetID):
-            gc.build(worker.ID, worker.buildTargetID)
-            print(worker.ID, ' Am still building this', worker.buildTargetID)
-            return
-    #up to 5 factories i guess
-    #try to blueprint
-    if MyInfo.getNumUnits(bc.UnitType.Factory, gc) < 5:
-        blueprint(worker,directions,location,bc.UnitType.Factory, gc)
-    
-
-
-    
-
-    #attack nearby enemy
-    #should probably have it flee but that is much harder to computer
-    if location.is_on_map():
-        nearby = gc.sense_nearby_units(location.map_location(), 2)
-        for other in nearby:
-            if other.team != my_team and gc.is_attack_ready(worker.ID) and gc.can_attack(worker.ID, other.id):
-                print(worker.ID, ' is attacking ',other.id)
-                gc.attack(worker.ID, other.id)
-                
-                return
-                
-   
-    
-    for d in directions:
-        if gc.can_harvest(worker.ID, d):
-            gc.harvest(worker.ID, d)
-            #print(worker.ID, ' Am harvesting stuff ')
-            return
-    
-    #wwhere 10 is the max number of workers
-    if MyInfo.getNumUnits(bc.UnitType.Worker,gc) < 10:
-        for d in directions:
-            if gc.can_replicate(worker.ID, d):
-                print(worker.ID, ' Am replicating ')
-                print('Number of workers is', MyInfo.getNumUnits(bc.UnitType.Worker, gc))
-                gc.replicate(worker.ID, d)
-                return
-            # a child is born. we should initialize it as a Worker class. but...for now...whatever man
-    
-    #check if we can blueprint...then...do it..
-    #this method doesnt exist yet. but it should handle like do we need one, do we have the funds, etc
-    '''
-'''
-    if info.isRocketBlueprintTime():
-        blueprint(worker,directions,location,bc.UnitType.Rocket, gc)
-        return
-        
-    if info.isFactoryBlueprintTime():
-        blueprint(worker,directions,location,utype, gc)
-        return
-    '''
-'''    
-    dr = random.choice(directions)
-    #last but not least, random walk
-    trymove(gc,worker.ID, dr)
-    return
-    '''
 #sense nearby unbuilt things and then work on that
 def workerTryBuilding(gc, u ):
     if u.location.is_on_map():
@@ -232,17 +146,6 @@ def workerLogic(gc, worker):
                 return
             # a child is born. we should initialize it as a Worker class. but...for now...whatever man
     
-    #check if we can blueprint...then...do it..
-    #this method doesnt exist yet. but it should handle like do we need one, do we have the funds, etc
-    '''
-    if info.isRocketBlueprintTime():
-        blueprint(worker,directions,location,bc.UnitType.Rocket, gc)
-        return
-        
-    if info.isFactoryBlueprintTime():
-        blueprint(worker,directions,location,utype, gc)
-        return
-    '''    
     dr = random.choice(directions)
     #last but not least, random walk
     trymove(gc,worker.id, dr)
