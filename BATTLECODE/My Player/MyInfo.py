@@ -2,8 +2,6 @@ import battlecode as bc
 
 gc = 0
 
-nearbyEnemies = []
-
 def getNumUnits(unitType, gcParam):
     global gc
     gc = gcParam
@@ -33,11 +31,15 @@ def getNumUnits(unitType, gcParam):
     elif unitType == bc.UnitType.Factory:
         return numF
 
-def nearbyEnemies(gc, unit):
-    global nearbyEnemies
+def nearbyEnemies(unit, gcParam):
+    gc = gcParam
+    nearbyEnemies = []
+    
     if unit.team == bc.Team.Red:
-        nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), 2, bc.Team.Blue)
+        #nearbyEnemies = gc.sense_nearby_units(unit.location.map_location(), unit.attack_range())
+        nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.attack_range(), bc.Team.Blue)
     else:
-        nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), 2, bc.Team.Red)
+        #nearbyEnemies = gc.sense_nearby_units(unit.location.map_location(), unit.attack_range())
+        nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.attack_range(), bc.Team.Red)
     return nearbyEnemies
 

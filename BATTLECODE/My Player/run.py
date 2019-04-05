@@ -11,7 +11,7 @@ import MyRanger
 import os
 print(os.getcwd())
 
-print("pystarting")
+# print("pystarting")
 
 
 
@@ -20,7 +20,7 @@ print("pystarting")
 gc = bc.GameController()
 directions = list(bc.Direction)
 
-print("pystarted")
+# print("pystarted")
 
 # It's a good idea to try to keep your bots deterministic, to make debugging easier.
 # determinism isn't required, but it means that the same things will happen in every thing you run,
@@ -40,7 +40,7 @@ my_team = gc.team()
 
 while True:
     # We only support Python 3, which means brackets around print()
-    print('pyround:', gc.round(), 'time left:', gc.get_time_left_ms(), 'ms')
+  ##### print('pyround:', gc.round(), 'time left:', gc.get_time_left_ms(), 'ms')
 
     # frequent try/catches are a good idea
     try:
@@ -54,8 +54,8 @@ while True:
 
             if unit.unit_type == bc.UnitType.Ranger:
                 MyRanger.rangerLogic(unit, gc)
-                print('You have ', MyInfo.getNumUnits(unit.unit_type, gc), ' Rangers!')
-            
+
+                            
             # first, let's look for nearby blueprints to work on
             location = unit.location
             if location.is_on_map():
@@ -63,11 +63,11 @@ while True:
                 for other in nearby:
                     if unit.unit_type == bc.UnitType.Worker and gc.can_build(unit.id, other.id):
                         gc.build(unit.id, other.id)
-                        print('built a factory!')
+                        #print('built a factory!')
                         # move onto the next unit
                         continue
                     if other.team != my_team and gc.is_attack_ready(unit.id) and gc.can_attack(unit.id, other.id):
-                        print('attacked a thing!')
+                        #print('attacked a thing!')
                         gc.attack(unit.id, other.id)
                         continue
 
@@ -81,7 +81,7 @@ while True:
             # and if that fails, try to move
             elif gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
                 gc.move_robot(unit.id, d)
-
+        
     except Exception as e:
         print('Error:', e)
         # use this to show where the error was
