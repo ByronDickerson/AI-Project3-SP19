@@ -1,0 +1,347 @@
+BattleCode Command and Variable Cheat Sheet
+
+Unit Commands:
+
+    attack(self, robot_id, target_unit_id)
+        Attacks the robot, dealing the unit's standard amount of damage.
+
+        * GameError::NoSuchUnit - the unit does not exist (inside the vision range).
+        * GameError::TeamNotAllowed - the unit is not on the current player's team.
+        * GameError::InappropriateUnitType - the unit is a healer, or not a robot.
+        * GameError::InvalidAction - the robot cannot attack that location.
+
+        :type self: GameController
+        :type robot_id: int
+        :type target_unit_id: int
+        :rtype: None
+
+    begin_snipe(self, ranger_id, location)
+        Begins the countdown to snipe a given location. Maximizes the units
+        attack and movement heats until the ranger has sniped. The ranger may
+        begin the countdown at any time, including resetting the countdown
+        to snipe a different location.
+
+    blink(self, mage_id, location)
+        Blinks the mage to the given location.
+
+    blueprint(self, worker_id, structure_type, direction)
+        Blueprints a unit of the given type in the given direction. Subtract
+        cost of that unit from the team's resource pool.
+
+    build(self, worker_id, blueprint_id)
+        Builds a given blueprint, increasing its health by the worker's build
+        amount. If raised to maximum health, the blueprint becomes a completed
+        structure.
+
+    can_attack(self, robot_id, target_unit_id)
+        Whether the robot can attack the given unit, without taking into
+        account the unit's attack heat. Takes into account only the unit's
+        attack range, and the location of the unit.
+
+    can_blink(self, mage_id, location)
+        Whether the mage can blink to the given location, without taking into
+        account the mage's ability heat. Takes into account only the mage's
+        ability range, the map terrain, positions of other units, and the edge
+        of the game map.
+
+    can_blueprint(self, worker_id, unit_type, direction)
+        Whether the worker can blueprint a unit of the given type. The worker
+        can only blueprint factories, and rockets if Rocketry has been
+        researched. The team must have sufficient karbonite in its resource
+        pool. The worker cannot already have performed an action this round.
+
+    can_build(self, worker_id, blueprint_id)
+        Whether the worker can build a blueprint with the given ID. The worker
+        and the blueprint must be adjacent to each other. The worker cannot
+        already have performed an action this round.
+
+    can_harvest(self, worker_id, direction)
+        Whether the worker is ready to harvest, and the given direction contains
+        karbonite to harvest. The worker cannot already have performed an action 
+        this round.
+
+    can_heal(self, healer_id, target_robot_id)
+        Whether the healer can heal the given robot, without taking into
+        account the healer's attack heat. Takes into account only the healer's
+        attack range, and the location of the robot.
+
+    can_javelin(self, knight_id, target_unit_id)
+        Whether the knight can javelin the given robot, without taking into
+        account the knight's ability heat. Takes into account only the knight's
+        ability range, and the location of the robot.
+
+    can_launch_rocket(self, rocket_id, destination)
+        Whether the rocket can launch into space. The rocket can launch if the
+        it has never been used before.
+
+    can_load(self, structure_id, robot_id)
+        Whether the robot can be loaded into the given structure's garrison. The robot
+        must be ready to move and must be adjacent to the structure. The structure
+        and the robot must be on the same team, and the structure must have space.
+
+    can_move(self, robot_id, direction)
+        Whether the robot can move in the given direction, without taking into
+        account the unit's movement heat. Takes into account only the map
+        terrain, positions of other robots, and the edge of the game map.
+
+    can_overcharge(self, healer_id, target_robot_id)
+        Whether the healer can overcharge the given robot, without taking into
+        account the healer's ability heat. Takes into account only the healer's
+        ability range, and the location of the robot.
+
+    can_produce_robot(self, factory_id, robot_type)
+        Whether the factory can produce a robot of the given type. The factory
+        must not currently be producing a robot, and the team must have
+        sufficient resources in its resource pool.
+
+    can_repair(self, worker_id, structure_id)
+        Whether the given worker can repair the given strucutre. Tests that the worker
+        is able to execute a worker action, that the structure is built, and that the
+        structure is within range.
+
+    can_replicate(self, worker_id, direction)
+        Whether the worker is ready to replicate. Tests that the worker's
+        ability heat is sufficiently low, that the team has sufficient
+        karbonite in its resource pool, and that the square in the given
+        direction is empty.
+
+    can_sense_location(self, location)
+        Whether the location is within the vision range.
+
+    can_sense_unit(self, id)
+        Whether there is a unit with this ID within the vision range.
+
+    can_unload(self, structure_id, direction)
+        Tests whether the given structure is able to unload a unit in the
+        given direction. There must be space in that direction, and the unit
+        must be ready to move.
+
+    current_duration_of_flight(self)
+        The current duration of flight if a rocket were to be launched this
+        round. Does not take into account any research done on rockets.
+
+    disintegrate_unit(self, unit_id)
+        Disintegrates the unit and removes it from the map. If the unit is a
+        factory or a rocket, also disintegrates any units garrisoned inside it.
+
+    end_turn(self)
+        :type self: GameController
+        :rtype: TurnMessage
+
+    harvest(self, worker_id, direction)
+        Harvests up to the worker's harvest amount of karbonite from the given
+        location, adding it to the team's resource pool.
+
+    heal(self, healer_id, target_robot_id)
+        Heals the robot, dealing the healer's standard amount of "damage".
+
+    initial_start_turn_message(self)
+        :type self: GameController
+        :rtype: InitialTurnApplication
+
+    is_attack_ready(self, robot_id)
+        Whether the robot is ready to attack. Tests whether the robot's attack
+        heat is sufficiently low.
+
+    is_blink_ready(self, mage_id)
+        Whether the mage is ready to blink. Tests whether the mage's ability
+        heat is sufficiently low.
+
+    is_heal_ready(self, healer_id)
+        Whether the healer is ready to heal. Tests whether the healer's attack
+        heat is sufficiently low.
+
+    is_javelin_ready(self, knight_id)
+        Whether the knight is ready to javelin. Tests whether the knight's
+        ability heat is sufficiently low.
+
+    is_move_ready(self, robot_id)
+        Whether the robot is ready to move. Tests whether the robot's attack
+        heat is sufficiently low.
+
+    is_occupiable(self, location)
+        Whether the location is clear for a unit to occupy, either by movement
+        or by construction.
+        * GameError::InvalidLocation - the location is outside the vision range.
+
+    is_over(self)
+        Is the game over?
+
+    is_overcharge_ready(self, healer_id)
+        Whether the healer is ready to overcharge. Tests whether the healer's
+        ability heat is sufficiently low.
+
+    javelin(self, knight_id, target_unit_id)
+        Javelins the robot, dealing the amount of ability damage.
+
+    karbonite_at(self, location)
+        The karbonite at the given location.
+
+    launch_rocket(self, rocket_id, location)
+        Launches the rocket into space. If the destination is not on the map of
+        the other planet, the rocket flies off, never to be seen again.
+
+    load(self, structure_id, robot_id)
+        Loads the robot into the garrison of the structure.
+
+    move_robot(self, robot_id, direction)
+        Moves the robot in the given direction.
+
+    next_turn(self)
+        Send the moves from the current turn and wait for the next turn.
+
+    orbit_pattern(self)
+        The orbit pattern that determines a rocket's flight duration.
+
+    overcharge(self, healer_id, target_robot_id)
+        Overcharges the robot, resetting the robot's cooldowns.
+
+    planet(self)
+        :type self: GameController
+        :rtype: Planet
+
+    produce_robot(self, factory_id, robot_type)
+        Starts producing the robot of the given type.
+
+    queue_research(self, branch)
+        Adds a branch to the back of the queue, if it is a valid upgrade, and
+        starts research if it is the first in the queue.
+
+        Returns whether the branch was successfully added.
+
+    repair(self, worker_id, structure_id)
+        Commands the worker to repair a structure, repleneshing health to it. This
+        can only be done to structures which have been fully built.
+
+    replicate(self, worker_id, direction)
+        Replicates a worker in the given direction. Subtracts the cost of the
+        worker from the team's resource pool.
+
+    research_info(self)
+        The research info of the current team, including what branch is
+        currently being researched, the number of rounds left.
+
+        Note that mutating this object by resetting or queueing research
+
+    reset_research(self)
+        Resets the research queue to be empty. Returns true if the queue was
+        not empty before, and false otherwise.
+
+    rocket_landings(self)
+        The landing rounds and locations of rockets in space that belong to the
+        current team.
+        Note that mutating this object does NOT have any effect on the actual
+        game. You MUST call the mutators in world!!
+
+    round(self)
+        Returns round number
+
+    start_game(self, player)
+	Starts the game
+
+    start_turn(self, turn)
+        Starts the turn
+
+    unload(self, structure_id, direction)
+        Unloads a robot from the garrison of the specified structure into an 
+        adjacent space. Robots are unloaded in the order they were loaded.
+
+    winning_team(self)
+        Returns the winning team
+
+    write_team_array(self, index, value)
+        Writes the value at the index of this planet's team array.
+        (The message teams can pass between planets)
+
+
+Unit Info:
+
+    Instance variables
+    ------------------
+    ability_cooldown
+        The active ability cooldown.
+        Errors if the unit is not a robot.
+
+    ability_heat
+        The active ability heat.
+
+    ability_range
+        The active ability range.
+
+    attack_cooldown
+        The attack cooldown.
+
+    attack_heat
+        The attack heat.
+
+    attack_range
+        The attack range.
+
+    healer_self_heal_amount
+        The amount of health passively restored to itself each round.
+
+    health
+        The current health.
+
+
+    id
+        The unique ID of a unit.
+
+    is_ability_unlocked
+        Whether the active ability is unlocked.
+
+    knight_defense
+        The amount of damage resisted by a knight when attacked.
+
+    location
+        The location of the unit.
+
+    max_health
+        The maximum health.
+
+    movement_cooldown
+        The movement cooldown.
+
+    movement_heat
+        The movement heat.
+
+    ranger_cannot_attack_range
+        The range within a ranger cannot attack.
+
+    ranger_is_sniping
+        Whether the ranger is sniping.
+
+    research_level
+        The current research level.
+
+    rocket_is_used
+        Whether the rocket has already been used.
+
+    rocket_travel_time_decrease
+        The number of rounds the rocket travel time is reduced by compared
+        to the travel time determined by the orbit of the planets.
+
+    structure_is_built
+        Whether this structure has been built.
+
+    structure_max_capacity
+        The max capacity of a structure.
+
+    team
+        The team the unit belongs to.
+
+    unit_type
+        The unit type.
+
+    vision_range
+        The unit vision range.
+
+    worker_build_health
+        The health restored when building or repairing a structure.
+
+    worker_harvest_amount
+        The maximum amount of karbonite harvested from a deposit in one turn.
+
+    worker_has_acted
+        Whether the worker has already acted (harveted, blueprinted, built, or
+        repaired) this round.
