@@ -93,7 +93,11 @@ def workerTryBuilding(gc, u ):
 
 def workerLogic(gc, worker):
     directions = MyInfo.directions
+
     location = worker.location #does this work?
+
+    location = worker.location.map_location()#does this work?
+
     my_team = gc.team()
 
     #The worker will prioritize building
@@ -110,12 +114,38 @@ def workerLogic(gc, worker):
     if MyInfo.getNumUnits(bc.UnitType.Rocket, gc) < 3:
         blueprint(worker, directions, location, bc.UnitType.Rocket, gc)
 
+
+
+    #wwhere 10 is the max number of workers
+    if MyInfo.getNumUnits(bc.UnitType.Worker,gc) < 15:
+        for d in directions:
+            if gc.can_replicate(worker.id, d):
+                #print(worker.id, ' Am replicating ')
+                #print('Number of workers is', MyInfo.getNumUnits(bc.UnitType.Worker, gc))
+                gc.replicate(worker.id, d)
+                return
+            # a child is born. we should initialize it as a Worker class. but...for now...whatever man
+    
+    
+    if workerTryBuilding(gc, worker):
+        return 
+
+    #up to 5 factories i guess
+    #try to blueprint
+
+    if MyInfo.getNumUnits(bc.UnitType.Rocket, gc) < 3 and gc.round() >= 100:
+        blueprint(worker, directions, location, bc.UnitType.Rocket, gc)
+
+
     if MyInfo.getNumUnits(bc.UnitType.Factory, gc) < 5:
         blueprint(worker,directions,location,bc.UnitType.Factory, gc)
     
 
 
+
     
+
+
 
     #attack nearby enemy
     #should probably have it flee but that is much harder to computer
@@ -123,11 +153,18 @@ def workerLogic(gc, worker):
         nearby = gc.sense_nearby_units(location.map_location(), 2)
         for other in nearby:
             if other.team != my_team and gc.is_attack_ready(worker.id) and gc.can_attack(worker.id, other.id):
+
                 #print(worker.id, ' is attacking ',other.id)
                 gc.attack(worker.id, other.id)
                 
                 return
                 
+
+                gc.attack(worker.id, other.id)
+                print('A Worker Attacks!')
+                return
+                
+
    
     
     for d in directions:
@@ -136,6 +173,7 @@ def workerLogic(gc, worker):
             #print(worker.ID, ' Am harvesting stuff ')
             return
     
+
     #wwhere 10 is the max number of workers
     if MyInfo.getNumUnits(bc.UnitType.Worker,gc) < 10:
         for d in directions:
@@ -146,6 +184,8 @@ def workerLogic(gc, worker):
                 return
             # a child is born. we should initialize it as a Worker class. but...for now...whatever man
     
+
+
     dr = random.choice(directions)
     #last but not least, random walk
     trymove(gc,worker.id, dr)

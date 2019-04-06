@@ -2,13 +2,13 @@
 # Need token force to stay with rangers
 # otherwise SEARCH AND DESTROY
 # retreat to healer if low
-import battlecode as bc
+
 import random
-import MyInfo
+import toolbox as tb
 
 # maybe consider also coding worker resource location
 
-def knightAction(gc, unit):
+def knightAction(bc, gc, unit):
 
     location = unit.location  # knight's current location
     my_team = gc.team()       # our team
@@ -22,7 +22,7 @@ def knightAction(gc, unit):
         # for units within attack range
         for other in shortrange:            
             # if the other unit is an enemy and knight can attack
-            if MyInfo.enemy(other) and gc.is_attack_ready(unit.id):
+            if tb.enemy(gc, other) and gc.is_attack_ready(unit.id):
                 #attack
                 print('attacked a thing!')
                 gc.attack(unit.id, other.id)
@@ -36,7 +36,7 @@ def knightAction(gc, unit):
             #for units within javelin range
             for other in midrange:
                 # if enemy detected, attack
-                if MyInfo.enemy(other):
+                if tb.enemy(gc, other):
                     gc.javelin(unit.id, other.id)
         # else no javelin, carry on
 
@@ -47,15 +47,15 @@ def knightAction(gc, unit):
 
             for other in longrange:
                 # does this unit have low health and has it located a friendly healer?
-                seekhealer = MyInfo.lowHealth(unit) and (not MyInfo.enemy(other)) and other.unit_type == bc.UnitType.Healer
+                seekhealer = tb.lowHealth(unit) and (not tb.enemy(gc, other)) and other.unit_type == bc.UnitType.Healer
                 
                 # if enemy or a needed healer is spotted, go towards that unit
-                if seekhealer or MyInfo.enemy(other):
-                    d = MyInfo.pathfind(unit, other)                   
+                if seekhealer or tb.enemy(gc, other):
+                    d = tb.pathfind(bc, unit, other)                   
 
                 # if no better options, move randomly
                 else:
-                    d = random.choice(list(bc.Direction))
+                    d = tb.pathrand(bc)
                     
                 # take actual movement
                 if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
