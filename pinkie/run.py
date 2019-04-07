@@ -31,10 +31,13 @@ random.seed(6138)
 
 # let's start off with some research!
 # we can queue as much as we want.
-gc.queue_research(bc.UnitType.Rocket)
-gc.queue_research(bc.UnitType.Worker)
-gc.queue_research(bc.UnitType.Ranger)
-gc.queue_research(bc.UnitType.Knight)
+for i in range(10):
+    gc.queue_research(bc.UnitType.Rocket)
+    gc.queue_research(bc.UnitType.Worker)
+    gc.queue_research(bc.UnitType.Ranger)
+    gc.queue_research(bc.UnitType.Knight)
+    gc.queue_research(bc.UnitType.Healer)
+    gc.queue_research(bc.UnitType.Mage)
 
 my_team = gc.team()
 
@@ -69,6 +72,9 @@ while True:
                     
             if unit.unit_type == bc.UnitType.Knight:
                 Knight.knightAction(gc,unit)
+
+            if unit.unit_type == bc.UnitType.Mage:
+                Mage.mageAction(gc, unit)
 
                
             # first, let's look for nearby blueprints to work on
