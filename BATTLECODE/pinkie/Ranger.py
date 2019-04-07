@@ -1,5 +1,5 @@
 import battlecode as bc 
-import MyInfo
+import Info
 import random
 
 possibleDirections = list(bc.Direction)
@@ -31,23 +31,10 @@ def rangerLogic(unitParam, gcParam):
     #Current unit location
     unitLocation = unit.location.map_location()
 
-    #If there are enemies, attack
-    if unit.team == bc.Team.Red:
-        enemies = gc.sense_nearby_units_by_team(unitLocation, 2, bc.Team.Blue)    
-    else:
-        enemies = gc.sense_nearby_units_by_team(unitLocation, 2, bc.Team.Red)
-
-    if len(enemies)>0:
-        for enemy in enemies:
-            if gc.can_attack(unit.id, enemy.id) and gc.is_attack_ready(unit.id):
-                gc.attack(unit.id, enemy.id)
-                print("A Ranger Attacks")
-                return
-
     #Nearby Enemy Location
-    enemies = MyInfo.nearbyEnemies(unit, gc)
+    enemies = Info.nearbyEnemies(unit, gc)
 
-
+    #If there are enemies, attack
     if len(enemies)>0:
         for enemy in enemies:
            #try to snipe enemies
@@ -59,7 +46,7 @@ def rangerLogic(unitParam, gcParam):
 
             elif gc.can_attack(unit.id, enemy.id) and gc.is_attack_ready(unit.id) :
                 gc.attack(unit.id, enemy.id)
-                print("A Ranger Attacked")
+                #print("A Ranger Attacked")
     else:
         # Move randomly
         for direction in possibleDirections:
