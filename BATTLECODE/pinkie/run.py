@@ -10,6 +10,7 @@ import Ranger
 import Worker
 import Knight
 import Rocket
+import Healer
 
 import os
 print(os.getcwd())
@@ -64,7 +65,10 @@ while True:
                 Rocket.rocketLogic(unit, gc)
                 
             if unit.unit_type == bc.UnitType.Knight:
-                Knight.knightAction(bc,gc,unit)
+                Knight.knightAction(gc,unit)
+
+            if unit.unit_type == bc.UnitType.Healer:
+                Healer.healerLogic(unit, gc)
 
                
             # first, let's look for nearby blueprints to work on
