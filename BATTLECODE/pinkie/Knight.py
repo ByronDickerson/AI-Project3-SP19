@@ -4,11 +4,12 @@
 # retreat to healer if low
 
 import random
-import toolbox as tb
+import battlecode as bc
+import Info
 
 # maybe consider also coding worker resource location
 
-def knightAction(bc, gc, unit):
+def knightAction(gc, unit):
 
     location = unit.location  # knight's current location
     my_team = gc.team()       # our team
@@ -22,7 +23,7 @@ def knightAction(bc, gc, unit):
         # for units within attack range
         for other in shortrange:            
             # if the other unit is an enemy and knight can attack
-            if tb.enemy(gc, other) and gc.is_attack_ready(unit.id):
+            if Info.enemy(gc, other) and gc.is_attack_ready(unit.id):
                 #attack
                 print('attacked a thing!')
                 gc.attack(unit.id, other.id)
@@ -36,7 +37,7 @@ def knightAction(bc, gc, unit):
             #for units within javelin range
             for other in midrange:
                 # if enemy detected, attack
-                if tb.enemy(gc, other):
+                if Info.enemy(gc, other):
                     gc.javelin(unit.id, other.id)
         # else no javelin, carry on
 
@@ -47,15 +48,15 @@ def knightAction(bc, gc, unit):
 
             for other in longrange:
                 # does this unit have low health and has it located a friendly healer?
-                seekhealer = tb.lowHealth(unit) and (not tb.enemy(gc, other)) and other.unit_type == bc.UnitType.Healer
+                seekhealer = Info.lowHealth(unit) and (not Info.enemy(gc, other)) and other.unit_type == bc.UnitType.Healer
                 
                 # if enemy or a needed healer is spotted, go towards that unit
                 if seekhealer or tb.enemy(gc, other):
-                    d = tb.pathfind(bc, unit, other)                   
+                    d = Info.pathfind(bc, unit, other)                   
 
                 # if no better options, move randomly
                 else:
-                    d = tb.pathrand(bc)
+                    d = 
                     
                 # take actual movement
                 if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
