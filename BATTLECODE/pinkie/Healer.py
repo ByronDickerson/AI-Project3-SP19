@@ -48,3 +48,15 @@ def healerLogic(unit, gc):
     if gc.can_heal(unit.id, nearDeath.id) and gc.is_heal_ready(unit.id) and not nearDeath.id == unit.id:
         gc.heal(unit.id, nearDeath.id)
         print("Healed an ally!")
+
+    highHeat = unit #just to set typying
+    for t in team:
+        if t.unit_type != bc.UnitType.Rocket and t.unit_type != bc.UnitType.Factory:
+            if t.ability_cooldown() > highHeat.ability_cooldown():
+                if t.attack_cooldown() > highHeat.attack_cooldown() and t.ability_cooldown() > highHeat.ability_cooldown():
+                    highHeat = t
+                highHeat = t
+
+    if gc.can_overcharge(unit.id, t.id) and gc.is_overcharge_ready(unit.id):
+        gc.overcharge(unit.id, t.id)
+    
