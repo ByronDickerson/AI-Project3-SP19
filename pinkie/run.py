@@ -4,15 +4,17 @@ import sys
 import traceback
 import time
 
-import MyInfo
+import Info
 import Factory
-import MyRanger
+import Ranger
 import Worker
+import Knight
+import Rocket
 
 import os
 print(os.getcwd())
 
-# print("pystarting")
+print("pystarting")
 
 
 # A GameController is the main type that you talk to the game with.
@@ -20,7 +22,7 @@ print(os.getcwd())
 gc = bc.GameController()
 directions = list(bc.Direction)
 
-# print("pystarted")
+print("pystarted")
 
 # It's a good idea to try to keep your bots deterministic, to make debugging easier.
 # determinism isn't required, but it means that the same things will happen in every thing you run,
@@ -52,14 +54,17 @@ while True:
                 Factory.factoryLogic(unit, gc)
 
             if unit.unit_type == bc.UnitType.Ranger:
-                MyRanger.rangerLogic(unit, gc)
+                Ranger.rangerLogic(unit, gc)
 
             if unit.unit_type == bc.UnitType.Worker:
                 #worker = Factory.Worker(unit) #instantiate custom worker object
                 Worker.workerLogic(gc, unit)
             
             if unit.unit_type == bc.UnitType.Rocket:
-                Worker.rocketLogic(unit, gc)
+                Rocket.rocketLogic(unit, gc)
+                
+            if unit.unit_type == bc.UnitType.Knight:
+                Knight.knightAction(bc,gc,unit)
 
                
             # first, let's look for nearby blueprints to work on
@@ -87,7 +92,7 @@ while True:
             # and if that fails, try to move
             
 
-            if MyInfo.getNumUnits(bc.UnitType.Rocket, gc) < 1 and gc.karbonite() > bc.UnitType.Rocket.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Rocket, d):
+            if Info.getNumUnits(bc.UnitType.Rocket, gc) < 1 and gc.karbonite() > bc.UnitType.Rocket.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Rocket, d):
                 if unit.id == rocket_builder_id:
                     try:
                         gc.build(unit.id, rocket_id)

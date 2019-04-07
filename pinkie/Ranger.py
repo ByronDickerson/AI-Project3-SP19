@@ -1,5 +1,5 @@
 import battlecode as bc 
-import MyInfo
+import Info
 import random
 
 possibleDirections = list(bc.Direction)
@@ -32,7 +32,7 @@ def rangerLogic(unitParam, gcParam):
     unitLocation = unit.location.map_location()
 
     #Nearby Enemy Location
-    enemies = MyInfo.nearbyEnemies(unit, gc)
+    enemies = Info.nearbyEnemies(unit, gc)
 
     #If there are enemies, attack
     if len(enemies)>0:
