@@ -23,13 +23,22 @@ def workerLogic(gc, worker):
     my_team = gc.team()
 
     #The worker will prioritize building
+    #Then replicating
     #Then attacking
     #THen gathering resources
-    #Then replicating
     #Then wandering around
     if workerTryBuilding(gc, worker):
         return 
 
+    #wwhere 10 is the max number of workers
+    if Info.getNumUnits(bc.UnitType.Worker,gc) < 10:
+        for d in directions:
+            if gc.can_replicate(worker.id, d):
+                #print(worker.id, ' Am replicating ')
+                #print('Number of workers is', Info.getNumUnits(bc.UnitType.Worker, gc))
+                gc.replicate(worker.id, d)
+                return
+            # a child is born. 
     #up to 5 factories i guess
     #try to blueprint
 
@@ -39,10 +48,6 @@ def workerLogic(gc, worker):
     if Info.getNumUnits(bc.UnitType.Factory, gc) < 5:
         blueprint(worker,directions,location,bc.UnitType.Factory, gc)
     
-
-
-    
-
     #attack nearby enemy
     #should probably have it flee but that is much harder to computer
     if location.is_on_map():
@@ -62,15 +67,7 @@ def workerLogic(gc, worker):
             #print(worker.ID, ' Am harvesting stuff ')
             return
     
-    #wwhere 10 is the max number of workers
-    if Info.getNumUnits(bc.UnitType.Worker,gc) < 10:
-        for d in directions:
-            if gc.can_replicate(worker.id, d):
-                #print(worker.id, ' Am replicating ')
-                #print('Number of workers is', Info.getNumUnits(bc.UnitType.Worker, gc))
-                gc.replicate(worker.id, d)
-                return
-            # a child is born. we should initialize it as a Worker class. but...for now...whatever man
+    
     
     dr = random.choice(directions)
     #last but not least, random walk
