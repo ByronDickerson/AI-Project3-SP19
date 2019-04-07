@@ -57,6 +57,6 @@ def healerLogic(unit, gc):
                     highHeat = t
                 highHeat = t
 
-    if gc.can_overcharge(unit.id, t.id) and gc.is_overcharge_ready(unit.id):
-        gc.overcharge(unit.id, t.id)
+    if gc.can_overcharge(unit.id, t.id) and gc.is_overcharge_ready(unit.id) and unit.id != highHeat.id:
+        gc.overcharge(unit.id, highHeat.id)
     
