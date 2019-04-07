@@ -98,5 +98,5 @@ def mage(gc, u):
                 guard(u, nearby_fr)
 
 def mageAction(gc, unit):
-
+	
 	return

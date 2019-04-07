@@ -5,6 +5,13 @@ import random
 gc = 0
 directions = list(bc.Direction)
 
+maxKnights = 10
+maxMages = 5
+maxRangers = 5
+maxHealers = 5
+maxMages = 5
+maxWorkers = 10 #not used?
+
 def getNumUnits(unitType, gcParam):
     global gc
     gc = gcParam

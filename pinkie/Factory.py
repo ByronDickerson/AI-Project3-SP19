@@ -23,7 +23,53 @@ def factoryLogic(unit, gc):
     #up until round 675 we will produce random bots
     if gc.round()<675:
         count = 4
-        if count==1 and Info.getNumUnits(bc.UnitType.Knight, gc)< 10:
+        #otherwise make more units in this order:
+        #(or maybe randomly?)
+        #Ranger
+        #Knight
+        #Healer
+        #Mage
+        #if we are low on workers, make some
+        nums = [Info.getNumUnits(bc.UnitType.Knight, gc), 
+        Info.getNumUnits(bc.UnitType.Ranger, gc), 
+        Info.getNumUnits(bc.UnitType.Healer, gc), 
+        Info.getNumUnits(bc.UnitType.Mage, gc)]
+
+        buildme_index = nums.index(min(nums))
+
+
+        if Info.getNumUnits(bc.UnitType.Worker, gc) < 3:
+            make(gc, unit,bc.UnitType.Worker)
+
+        if buildme_index == 0 and nums[0] < Info.maxKnights:
+                make(gc, unit, bc.UnitType.Knight)
+
+        elif buildme_index == 1 and nums[1] < Info.maxRangers:
+                make(gc, unit, bc.UnitType.Ranger)
+        
+        elif buildme_index == 2 and nums[2] < Info.maxHealers:
+            make(gc, unit, bc.UnitType.Healer)
+
+        elif buildme_index == 3 and nums[3] < Info.maxMages:
+            make(gc, unit, bc.UnitType.Mage)
+
+
+        '''
+        if nums[0], gc) < Info.maxKnights:
+            make(gc, unit, bc.UnitType.Knight)
+        
+        elif Info.getNumUnits(bc.UnitType.Ranger, gc) < Info.maxRangers:
+            make(gc, unit, bc.UnitType.Ranger)
+        
+        elif Info.getNumUnits(bc.UnitType.Healer, gc) < Info.maxHealers:
+            make(gc, unit, bc.UnitType.Healer)
+
+        elif Info.getNumUnits(bc.UnitType.Mage, gc) < Info.maxMages:
+            make(gc, unit, bc.UnitType.Mage)
+
+
+
+        if count==1 and Info.getNumUnits(bc.UnitType.Knight, gc)< :
             if gc.can_produce_robot(unit.id, bc.UnitType.Knight):
                 gc.produce_robot(unit.id, bc.UnitType.Knight)
                 #print(unit.id, " Factory making a knight ")
@@ -46,4 +92,12 @@ def factoryLogic(unit, gc):
                 gc.produce_robot(unit.id, bc.UnitType.Mage)
                 #print(unit.id, " Factory making a mage ")
                 return
+        '''
     return
+
+
+def make(gc, factory, utype):
+    if gc.can_produce_robot(factory.id, utype):
+        gc.produce_robot(factory.id, utype)
+        #print('Produced a ', utype)
+        
