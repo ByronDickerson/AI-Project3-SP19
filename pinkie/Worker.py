@@ -48,18 +48,14 @@ def workerLogic(gc, worker):
     if Info.getNumUnits(bc.UnitType.Factory, gc) < 5:
         blueprint(worker,directions,location,bc.UnitType.Factory, gc)
     
-    #attack nearby enemy
     #should probably have it flee but that is much harder to computer
     if location.is_on_map():
         nearby = gc.sense_nearby_units(location.map_location(), 2)
         for other in nearby:
-            if other.team != my_team and gc.is_attack_ready(worker.id) and gc.can_attack(worker.id, other.id):
+            if other.team != my_team: #and gc.is_attack_ready(worker.id) and gc.can_attack(worker.id, other.id):
                 #print(worker.id, ' is attacking ',other.id)
-                gc.attack(worker.id, other.id)
-                
+                runaway(gc, worker, other)
                 return
-                
-   
     
     for d in directions:
         if gc.can_harvest(worker.id, d):
@@ -74,6 +70,18 @@ def workerLogic(gc, worker):
     trymove(gc,worker.id, dr)
     return
 
+def runaway(gc, worker, other):
+    t = Info.pathfind(worker,other)
+    go = t
+    if t == bc.Direction.South:
+        go = bc.Direction.North
+    elif t == bc.Direction.North:
+        go = bc.Direction.South
+    elif t == bc.Direction.East:
+        go = bc.Direction.West
+    elif t == bc.Direction.West:
+        go = bc.Direction.East
+    trymove(gc, worker.id, go)
 
 #custom move function for clarity. completely unnecessary but whatver
 def trymove(gc, id, dir):

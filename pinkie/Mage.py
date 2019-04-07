@@ -39,7 +39,7 @@ def blink_attack_earth(gc, unit):
 		return
 		
 	location = unit.location
-	enemy_team = get_enemy_team(gc)
+	enemy_team = Info.get_enemy_team()
 	
 	possible_targets = gc.sense_nearby_units_by_team(location.map_location(), 2, enemy_team)
 	if len(possible_targets) > 2:
