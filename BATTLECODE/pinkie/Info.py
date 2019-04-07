@@ -91,6 +91,10 @@ def pathfind(unit, target):
 
     return d
 
+# return a random direction
+def pathrand():
+    return random.choice(list(bc.Direction))
+
 # is other unit an enemy?
 # returns true if other is an enemy
 def enemy(other):
