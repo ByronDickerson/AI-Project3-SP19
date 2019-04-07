@@ -61,10 +61,14 @@ while True:
                 Worker.workerLogic(gc, unit)
             
             if unit.unit_type == bc.UnitType.Rocket:
-                Rocket.rocketLogic(unit, gc)
-                
+                #if rocket.location.map_location().planet == bc.Planet.Mars:
+                if gc.planet() == bc.Planet.Mars:
+                    Rocket.rocketMars(unit,gc)
+                else:
+                    Rocket.rocketLogic(unit, gc)
+                    
             if unit.unit_type == bc.UnitType.Knight:
-                Knight.knightAction(bc,gc,unit)
+                Knight.knightAction(gc,unit)
 
                
             # first, let's look for nearby blueprints to work on

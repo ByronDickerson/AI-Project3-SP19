@@ -37,20 +37,22 @@ def rocketLogic(rocket, gc):
             return
     #from TKUS
     
-    if rocket.location.map_location().planet == bc.Planet.Mars:
-        print('Am On Mars')
-        for d in Info.directions:
-            if occupants > 0 and gc.can_unload(rocket.id, d):
-                gc.unload(rocket.id, d)
-                print('Rocket unloaded someone onto mars!')
-                return                
-        if occupants == 0: #empty and on mars is just useless, an obstacle for other rockets. so perish
-            gc.disintegrate_unit(rocket.id)
-            print('It was an honor being a rocket. occupants =', occupants)
-            return
-    if gc.round() % 50 == 0:
-        print(rocket.id, ':',rocket.location.map_location().planet) #only print every 50 rds
+    
+    ##if gc.round() % 50 == 0:
+    #    print(rocket.id, ':',rocket.location.map_location().planet) #only print every 50 rds
         
+def rocketMars(rocket, gc):
+    occupants = len(rocket.structure_garrison())  
+    #print('Am On Mars')
+    for d in Info.directions:
+        if occupants > 0 and gc.can_unload(rocket.id, d):
+            gc.unload(rocket.id, d)
+            print('Rocket unloaded someone onto mars!')
+            return                
+    if occupants == 0: #empty and on mars is just useless, an obstacle for other rockets. so perish
+        gc.disintegrate_unit(rocket.id)
+        print('It was an honor being a rocket. occupants =', occupants)
+        return
     
 #helper to rocket
 #copied entirely from the skid3 guy or whatever the name is
