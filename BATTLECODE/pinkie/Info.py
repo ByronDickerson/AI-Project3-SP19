@@ -5,6 +5,9 @@ import random
 gc = 0
 directions = list(bc.Direction)
 
+def getTotalNumUnits():
+    return len(list(gc.my_units()))
+
 def getNumUnits(unitType, gcParam):
     global gc
     gc = gcParam
@@ -49,10 +52,8 @@ def nearbyEnemies(unit, gcParam):
     nearbyEnemies = []
     
     if unit.team == bc.Team.Red:
-        #nearbyEnemies = gc.sense_nearby_units(unit.location.map_location(), unit.attack_range())
         nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.attack_range(), bc.Team.Blue)
     else:
-        #nearbyEnemies = gc.sense_nearby_units(unit.location.map_location(), unit.attack_range())
         nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.attack_range(), bc.Team.Red)
     return nearbyEnemies
 
@@ -130,7 +131,7 @@ def enemy(other):
     return other.team != gc.team()
 
 # does our unit have low health?
-# returns true if health is below 20%
+# returns true if health is below 50%
 def lowHealth(unit):
    return unit.health < (unit.max_health / 2)
 
