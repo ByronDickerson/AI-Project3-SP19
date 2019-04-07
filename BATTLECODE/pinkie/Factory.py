@@ -20,6 +20,7 @@ def factoryLogic(unit, gc):
             gc.unload(unit.id, direction)
             #print(unit.id, " Factory just unloaded a..something ")
             return
+        
     #up until round 675 we will produce random bots
     if gc.round()<675:
         if count==1 and Info.getNumUnits(bc.UnitType.Knight, gc)< 10:

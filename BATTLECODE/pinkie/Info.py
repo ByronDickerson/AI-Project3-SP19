@@ -132,5 +132,5 @@ def enemy(other):
 # does our unit have low health?
 # returns true if health is below 20%
 def lowHealth(unit):
-   return unit.health < (unit.max_health / 4)
+   return unit.health < (unit.max_health / 2)
 
