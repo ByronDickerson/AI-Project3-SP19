@@ -8,5 +8,13 @@ def healerLogic(unit, gc)
         return
 
     #find nearby teammates
-    team = Info.nearbyTeamAbility(unit, gc)
-    
+    teamAbility = Info.nearbyTeamAbility(unit, gc)
+    team = Info.nearbyTeam(unit, gc)
+    nearDeath = unit #just to set it as the same type
+    for t in team:
+        if Info.lowHealth(t) and t.health < nearDeath.health:
+            nearDeath = t
+
+    if can_heal(unit.id, nearDeath.id) and is_heal_ready(unit.id, nearDeath.id):
+        heal(unit.id, nearDeath.id)
+        
