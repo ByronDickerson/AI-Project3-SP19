@@ -4,12 +4,8 @@ import sys
 import traceback
 import time
 
-import Info
-import Factory
-import Ranger
-import Worker
-import Knight
-import Rocket
+
+import Info, Factory, Ranger, Worker, Knight, Rocket, Mage
 
 import os
 print(os.getcwd())

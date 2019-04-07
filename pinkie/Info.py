@@ -14,6 +14,7 @@ def getNumUnits(unitType, gcParam):
     numH = 0
     numF = 0
     numW = 0
+    numM = 0
     numRockets = 0
 
     for unit in gc.my_units():
@@ -29,6 +30,9 @@ def getNumUnits(unitType, gcParam):
             numRockets+= 1
         elif unit.unit_type == bc.UnitType.Worker:
             numW+= 1
+        elif unit.unit_type == bc.UnitType.Mage:
+            numM+= 1
+        
 
 
     if unitType == bc.UnitType.Ranger:
@@ -43,6 +47,8 @@ def getNumUnits(unitType, gcParam):
         return numRockets
     elif unitType == bc.UnitType.Worker:
         return numW
+    elif unitType == bc.UnitType.Mage:
+        return numM
 
 def nearbyEnemies(unit, gcParam):
     gc = gcParam
@@ -105,3 +111,13 @@ def enemy(other):
 def lowHealth(unit):
    return unit.health < (unit.max_health / 5)
 
+def get_enemy_team():
+	if gc.team() == bc.Team.Blue:
+		enemy_team = bc.Team.Red
+
+	elif gc.team() == bc.Team.Red:
+		enemy_team = bc.Team.Blue
+	else:
+		enemy_team = None
+		print("oh fuck u did team wrong")
+	return enemy_team

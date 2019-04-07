@@ -22,6 +22,7 @@ def factoryLogic(unit, gc):
             return
     #up until round 675 we will produce random bots
     if gc.round()<675:
+        count = 4
         if count==1 and Info.getNumUnits(bc.UnitType.Knight, gc)< 10:
             if gc.can_produce_robot(unit.id, bc.UnitType.Knight):
                 gc.produce_robot(unit.id, bc.UnitType.Knight)
@@ -34,9 +35,15 @@ def factoryLogic(unit, gc):
                 #print(unit.id, " Factory making a ranger ")
                 return
 
-        elif count==3 and Info.getNumUnits(bc.UnitType.Healer, gc)< 5:
-            if gc.can_produce_robot(unit.id, bc.UnitType.Healer):
-                gc.produce_robot(unit.id, bc.UnitType.Healer)
+        #elif count==3 and Info.getNumUnits(bc.UnitType.Healer, gc)< 5:
+            #if gc.can_produce_robot(unit.id, bc.UnitType.Healer):
+                #gc.produce_robot(unit.id, bc.UnitType.Healer)
                 #print(unit.id, " Factory making a healer ")
+                #return
+
+        elif count==4 and Info.getNumUnits(bc.UnitType.Mage, gc)< 5:
+            if gc.can_produce_robot(unit.id, bc.UnitType.Mage):
+                gc.produce_robot(unit.id, bc.UnitType.Mage)
+                #print(unit.id, " Factory making a mage ")
                 return
     return
