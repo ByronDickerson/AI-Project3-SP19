@@ -37,6 +37,10 @@ def rocketLogic(rocket, gc):
             return
     #from TKUS
     
+    if Info.roll(5):
+        for d in Info.directions:
+            if gc.can_unload(rocket.id,d):
+                gc.unload(rocket.id,d)
     
     ##if gc.round() % 50 == 0:
     #    print(rocket.id, ':',rocket.location.map_location().planet) #only print every 50 rds

@@ -128,3 +128,10 @@ def get_enemy_team():
 		enemy_team = None
 		print("oh fuck u did team wrong")
 	return enemy_team
+
+# roll the dice (d100). if it's under value p, return true.
+def roll(p=50):
+    r = random.randint(1,100)
+    if r < p:
+        return True
+    return False
