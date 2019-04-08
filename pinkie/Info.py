@@ -1,6 +1,6 @@
 #The info file was inspired from Slink3's extra info.py
 import battlecode as bc
-import random
+import random, math
 
 gc = 0
 directions = list(bc.Direction)
@@ -103,6 +103,15 @@ def pathfind(unit, target):
         d = bc.Direction.South
 
     return d
+
+# reference: Pythagoras
+def distancebetween(origin,target):
+    x1 = origin.location.map_location().x
+    y1 = origin.location.map_location().y
+    x2 = target.location.map_location().x
+    y2 = target.location.map_location().y
+
+    return math.hypot(x1-x2, y1-y2)
 
 # return a random direction
 def pathrand():
