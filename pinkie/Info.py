@@ -11,6 +11,8 @@ maxRangers = 5
 maxHealers = 5
 maxMages = 5
 maxWorkers = 10 #not used?
+maxFactories = 5
+maxRockets = 3
 
 marsTarget = None #On mars we will be savage and immediately swarm whoever we see
 

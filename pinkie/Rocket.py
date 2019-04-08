@@ -93,7 +93,8 @@ def situation_is_dire(gc, rocket):
         foes = gc.sense_nearby_units_by_team(rocket.location.map_location(), 25, Info.get_enemy_team()) #is this radius valid? idk
         friends = gc.sense_nearby_units_by_team(rocket.location.map_location(), 25, gc.team())
         
-        if len(friends) / len(foes) < 0.15:
-            return True #this means 85 percent of nearby bots are enemies so remaining 15 will probably perish soon
+        #this means 85 percent of nearby bots are enemies so remaining 15 will probably perish soon
+        if len(foes) != 0 and len(friends) / len(foes) < 0.15:
+            return True 
         return False
     

@@ -27,19 +27,29 @@ def battle(gc,unit, enemy):
         #print('Mage is attack!')
 
 #follow a friend and attack anything that gets close
-# Prioritize ranger but guard anyone, even structures
+# Prioritize ranger but guard anyone except structures 
 def guard(gc, unit, nearfriends):
     if len(nearfriends) == 0:
         return
-    gtarget = nearfriends[0]
+    gtarget = None
+    targetoption2 = nearfriends[0]
     #check if anyone is a ranger
     for f in nearfriends:
         if f.unit_type == bc.UnitType.Ranger:
             gtarget = f
             break
-    followDir = Info.pathfind(unit,gtarget)
+        if f.unit_type == bc.UnitType.Knight: #second choice is knight
+            gtarget = f
+        if f.unit_type in [bc.UnitType.Worker, bc.UnitType.Mage, bc.UnitType.Healer]:
+            targetoption2 = f
+    if gtarget is not None: #aka we found a knight or ranger:
+        followDir = Info.pathfind(unit,gtarget)
+    else: #one of the other bots
+        followDir = Info.pathfind(unit,targetoption2)
 
-    if Info.roll(25):  #25 percent chance to move randomly instead of directly follow...this way it won't pin someone to a wall
+    #25 percent chance to move randomly instead of directly follow...this way it won't pin someone to a wall
+    #this also happens if the only nearby friend is a structure, to avoid crowding
+    if Info.roll(25) or targetoption2.unit_type in [bc.UnitType.Factory, bc.UnitType.Rocket]:  
         followDir = random.choice(Info.directions)
     trymove(gc, unit.id, followDir)
 

@@ -63,11 +63,37 @@ def workerLogic(gc, worker):
     #Then attacking
     #THen gathering resources
     #Then wandering around
+    
+    
+    # but if we are poor...try and fix that immediately
+    if gc.karbonite < 200:    
+        for d in directions:
+            if gc.can_harvest(worker.id, d):
+                gc.harvest(worker.id, d)
+                #print(worker.ID, ' Am harvesting stuff ')
+                return
+
     if workerTryBuilding(gc, worker):
         return 
 
-    #wwhere 10 is the max number of workers
-    if Info.getNumUnits(bc.UnitType.Worker,gc) < 10:
+    
+    #try to blueprint
+
+    nums = [Info.getNumUnits(bc.UnitType.Factory, gc), 
+        Info.getNumUnits(bc.UnitType.Rocket, gc)]
+
+    buildme_index = nums.index(min(nums))
+
+    if buildme_index == 0 and nums[0] < Info.maxFactories:
+        blueprint(worker, directions, location, bc.UnitType.Factory, gc)
+        return
+    elif buildme_index == 1 and nums[1] < Info.maxRockets:
+        blueprint(worker, directions, location, bc.UnitType.Rocket, gc)
+        return
+
+    #Only consider replication if you have at least 1 factory
+    #(Or 15 pecent chance..)
+    if (Info.getNumUnits(bc.UnitType.Worker,gc) < Info.maxWorkers and nums[0] > 0) or Info.roll(15):
         for d in directions:
             if gc.can_replicate(worker.id, d):
                 #print(worker.id, ' Am replicating ')
@@ -75,15 +101,8 @@ def workerLogic(gc, worker):
                 gc.replicate(worker.id, d)
                 return
             # a child is born. 
-    #up to 5 factories i guess
-    #try to blueprint
 
-    if Info.getNumUnits(bc.UnitType.Rocket, gc) < 3:
-        blueprint(worker, directions, location, bc.UnitType.Rocket, gc)
 
-    if Info.getNumUnits(bc.UnitType.Factory, gc) < 5:
-        blueprint(worker,directions,location,bc.UnitType.Factory, gc)
-    
     #should probably have it flee but that is much harder to computer
     if location.is_on_map():
         nearby = gc.sense_nearby_units(location.map_location(), 2)
