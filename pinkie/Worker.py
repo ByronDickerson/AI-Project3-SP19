@@ -40,11 +40,11 @@ def workerMars(gc, worker):
 
     #just go absolutely nuts on replication
     for d in directions:
-            if gc.can_replicate(worker.id, d):
-                #print(worker.id, ' Am replicating ')
-                #print('Number of workers is', Info.getNumUnits(bc.UnitType.Worker, gc))
-                gc.replicate(worker.id, d)
-                return
+        if gc.can_replicate(worker.id, d):
+            #print(worker.id, ' Am replicating ')
+            #print('Number of workers is', Info.getNumUnits(bc.UnitType.Worker, gc))
+            gc.replicate(worker.id, d)
+            return
 
     # And finally, harvest.
     for d in directions:
@@ -52,6 +52,11 @@ def workerMars(gc, worker):
             gc.harvest(worker.id, d)
             #print(worker.ID, ' Am harvesting stuff ')
             return
+
+    # or random walk
+    random.shuffle(directions)
+    for d in directions:
+        trymove(gc, worker.id, d)
 
 def workerLogic(gc, worker):
     directions = list(bc.Direction)
@@ -64,15 +69,20 @@ def workerLogic(gc, worker):
     #THen gathering resources
     #Then wandering around
     
-    
+    '''
     # but if we are poor...try and fix that immediately
-    if gc.karbonite() < 200:    
+    # or move around
+    if gc.karbonite() < 100:    
+        random.shuffle(directions)
         for d in directions:
             if gc.can_harvest(worker.id, d):
                 gc.harvest(worker.id, d)
                 #print(worker.ID, ' Am harvesting stuff ')
-                return
-
+                #return
+        for d in directions:
+            if gc.can_move(worker.id, d):
+                trymove(gc, worker.id, d)
+    '''
     if workerTryBuilding(gc, worker):
         return 
 

@@ -44,6 +44,8 @@ while True:
     # frequent try/catches are a good idea
     try:
 
+        if gc.round()%20 == 0:
+            print("We have $",gc.karbonite())
         
         # walk through our units:
         for unit in gc.my_units():
