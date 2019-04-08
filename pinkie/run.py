@@ -5,7 +5,7 @@ import traceback
 import time
 
 
-import Info, Factory, Ranger, Worker, Knight, Rocket, Mage
+import Info, Factory, Ranger, Worker, Knight, Rocket, Mage, Healer
 
 import os
 print(os.getcwd())
@@ -71,7 +71,9 @@ while True:
 
             if unit.unit_type == bc.UnitType.Mage:
                 Mage.mageAction(gc, unit)
-
+            
+            if unit.unit_type == bc.UnitType.Healer:
+                Healer.healerLogic(unit, gc)
                
             # first, let's look for nearby blueprints to work on
             '''location = unit.location
