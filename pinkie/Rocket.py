@@ -35,13 +35,16 @@ def rocketLogic(rocket, gc):
     #rocket chooses who to load; it takes priority
     nearby = gc.sense_nearby_units(rocketLoc, 2)
     for other in nearby:
-        if gc.can_load(rocket.id,other.id):
+        if gc.can_load(rocket.id,other.id) and not allSlurped(gc):
             gc.load(rocket.id, other.id)
             print(rocket.id,'Rocket slurped a fellow',other.unit_type)
             return
     #from TKUS
-    
-    if Info.roll(5):
+
+    #check if we have accidentally slurped every single person
+    #If so, then unload
+    #(Also 1 percent chance of this happening..just in case? i guess?)
+    if Info.roll(1) or allSlurped(gc):
         for d in Info.directions:
             if gc.can_unload(rocket.id,d):
                 gc.unload(rocket.id,d)
@@ -62,6 +65,15 @@ def rocketMars(rocket, gc):
         print('It was an honor being a rocket. occupants =', occupants)
         return
     
+#Check if everyone is in a rocket
+#return false if even one person is not in garrison
+def allSlurped(gc):
+    for unit in gc.my_units():
+        if not unit.is_in_garrison():
+            return False
+    return True
+
+
 #helper to rocket
 #copied entirely from the skid3 guy or whatever the name is
 def launch(gc, unitId):

@@ -73,7 +73,10 @@ while True:
                 Knight.knightAction(gc,unit)
 
             if unit.unit_type == bc.UnitType.Mage:
-                Mage.mageAction(gc, unit)
+                if gc.planet() == bc.Planet.Earth:
+                    Mage.mageAction(gc, unit)
+                else:
+                    Mage.mageActionMars(gc, unit)
             
             if unit.unit_type == bc.UnitType.Healer:
                 Healer.healerLogic(unit, gc)

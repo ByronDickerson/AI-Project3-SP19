@@ -4,8 +4,6 @@ import random
 
 import Info
 
-
-
 # run towards the given rocket... 
 def run_toward_rocket(gc, unit, r):
     if r.unit_type == bc.UnitType.Rocket:
@@ -72,6 +70,42 @@ def chase(gc, u, enemy):
     d = Info.pathfind(u,enemy)
     trymove(gc, u.id, d)
 
+def mageActionMars(gc, u):
+    if u.location.is_on_map():
+        #sense friends and foes
+        nearby_enemies = gc.sense_nearby_units_by_team(u.location.map_location(), u.vision_range, Info.get_enemy_team())
+        nearby_attackable = gc.sense_nearby_units_by_team(u.location.map_location(), u.attack_range(), Info.get_enemy_team())
+        nearby_friends = gc.sense_nearby_units_by_team(u.location.map_location(), u.vision_range, gc.team())
+        nearby_rocket = gc.sense_nearby_units_by_type(u.location.map_location(), 2, bc.UnitType.Rocket)
+
+        #if badly damaged, flee (with blink) ((if possible))
+        if Info.lowHealth(u):
+            blinkToRandom_Mars(gc, u)
+
+        # Otherwise battle the biggest threat
+        if len(nearby_attackable) > 0:
+            bad_guy = worst_enemy(u, nearby_attackable)
+            # we're on mars now baby so let everyone know where this dude is
+            if Info.marsTarget is None:
+                Info.marsTarget = bad_guy
+            battle(gc,u, bad_guy)
+
+        # Chase down closest threat
+        elif len(nearby_enemies) > 0:
+            bad_guy = closest_enemy(u, nearby_enemies)
+            # we're on mars now baby so let everyone know where this dude is
+            if Info.marsTarget is None:
+                Info.marsTarget = bad_guy
+            chase(gc, u, bad_guy)
+        
+        #Hunt down freshly landed rockets or basically anyone we see
+        elif Info.marsTarget is not None:
+            chase(gc, u, Info.marsTarget)
+        
+        else:
+            # follow around a friend... if a foe approaches mage will attack because that takes priority
+            guard(gc, u, nearby_friends)
+
 
 # The main fucntion for mage
 def mageAction(gc, u):
@@ -81,6 +115,10 @@ def mageAction(gc, u):
         nearby_attackable = gc.sense_nearby_units_by_team(u.location.map_location(), u.attack_range(), Info.get_enemy_team())
         nearby_friends = gc.sense_nearby_units_by_team(u.location.map_location(), u.vision_range, gc.team())
         nearby_rocket = gc.sense_nearby_units_by_type(u.location.map_location(), 2, bc.UnitType.Rocket)
+
+        #if badly damaged, flee (with blink)
+        if Info.lowHealth(u):
+            blinkToRandom_Earth(gc, u)
 
         # if it's time to go...then go
         if gc.planet() == bc.Planet.Earth:
@@ -106,13 +144,45 @@ def mageAction(gc, u):
 
 
 
+def blinkToRandom_Earth(gc, unit):
+    earthMap = gc.starting_map(bc.Planet.Earth)
+    i = random.randint(0, earthMap.height-1)
+    j = random.randint(0, earthMap.width-1)
+    
+    #10 tries to locate safe space
+    if not bc.MapLocation(bc.Planet.Earth, i, j).is_on_map():
+        for i in range(10):
+            i = random.randint(0, earthMap.height-1)
+            j = random.randint(0, earthMap.width-1)
+            if bc.MapLocation(bc.Planet.Earth,i,j).is_on_map():
+                break
+    try:
+        temp_location = bc.MapLocation(bc.Planet.Earth, i, j)
+        if gc.can_blink(unit.id, temp_location):
+            gc.blink(unit.id, temp_location)
+            return
+
+def blinkToRandom_Mars(gc, unit):
+    marsMap = gc.starting_map(bc.Planet.Mars)
+    i = random.randint(0, marsMap.height-1)
+    j = random.randint(0, marsMap.width-1)
+    
+    #10 tries to locate safe space
+    if not bc.MapLocation(bc.Planet.Mars, i, j).is_on_map():
+        for i in range(10):
+            i = random.randint(0, marsMap.height-1)
+            j = random.randint(0, marsMap.width-1)
+            if bc.MapLocation(bc.Planet.Mars,i,j).is_on_map():
+                break
+    try:
+        temp_location = bc.MapLocation(bc.Planet.Mars, i, j)
+        if gc.can_blink(unit.id, temp_location):
+            gc.blink(unit.id, temp_location)
+            return
+    except:
+        return
 
 
-'''
-
-Extra stuff that isnt implemented!
-
-'''
 #dunno if we will use these but here they are
 
 def blink_attack_mars(gc, unit):
