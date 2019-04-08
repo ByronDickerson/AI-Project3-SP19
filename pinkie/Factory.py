@@ -4,7 +4,7 @@ import Info
 
 possibleDirections = list(bc.Direction)
 
-
+ 
 def factoryLogic(unit, gc):
     counter = [1, 2, 3]
     count = random.choice(counter)

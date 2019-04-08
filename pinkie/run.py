@@ -10,7 +10,7 @@ import Info, Factory, Ranger, Worker, Knight, Rocket, Mage, Healer
 import os
 print(os.getcwd())
 
-print("pystarting")
+print("pystarting") 
 
 
 # A GameController is the main type that you talk to the game with.

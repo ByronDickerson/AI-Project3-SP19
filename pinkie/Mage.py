@@ -6,7 +6,7 @@ import Info
 
 # run towards the given rocket... 
 def run_toward_rocket(gc, unit, r):
-    if r.unit_type == bc.UnitType.Rocket:
+    if r.unit_type == bc.UnitType.Rocket: 
         dir = Info.pathfind(unit,r)
     trymove(gc, unit.id, dir)
 
@@ -20,7 +20,7 @@ def worst_enemy(unit, enemies):
 
 # Fight the given enemy...by attacking...
 def battle(gc,unit, enemy):
-    if Info.enemy(enemy) and gc.is_attack_ready(unit.id) and gc.can_attack(unit.id, enemy.id):
+    if Info.enemy(enemy,gc) and gc.is_attack_ready(unit.id) and gc.can_attack(unit.id, enemy.id):
         gc.attack(unit.id, enemy.id)
         #print('Mage is attack!')
 
@@ -73,8 +73,8 @@ def chase(gc, u, enemy):
 def mageActionMars(gc, u):
     if u.location.is_on_map():
         #sense friends and foes
-        nearby_enemies = gc.sense_nearby_units_by_team(u.location.map_location(), u.vision_range, Info.get_enemy_team())
-        nearby_attackable = gc.sense_nearby_units_by_team(u.location.map_location(), u.attack_range(), Info.get_enemy_team())
+        nearby_enemies = gc.sense_nearby_units_by_team(u.location.map_location(), u.vision_range, Info.get_enemy_team(gc))
+        nearby_attackable = gc.sense_nearby_units_by_team(u.location.map_location(), u.attack_range(), Info.get_enemy_team(gc))
         nearby_friends = gc.sense_nearby_units_by_team(u.location.map_location(), u.vision_range, gc.team())
         nearby_rocket = gc.sense_nearby_units_by_type(u.location.map_location(), 2, bc.UnitType.Rocket)
 
@@ -111,8 +111,8 @@ def mageActionMars(gc, u):
 def mageAction(gc, u):
     if u.location.is_on_map():
         #sense friends and foes
-        nearby_enemies = gc.sense_nearby_units_by_team(u.location.map_location(), u.vision_range, Info.get_enemy_team())
-        nearby_attackable = gc.sense_nearby_units_by_team(u.location.map_location(), u.attack_range(), Info.get_enemy_team())
+        nearby_enemies = gc.sense_nearby_units_by_team(u.location.map_location(), u.vision_range, Info.get_enemy_team(gc))
+        nearby_attackable = gc.sense_nearby_units_by_team(u.location.map_location(), u.attack_range(), Info.get_enemy_team(gc))
         nearby_friends = gc.sense_nearby_units_by_team(u.location.map_location(), u.vision_range, gc.team())
         nearby_rocket = gc.sense_nearby_units_by_type(u.location.map_location(), 2, bc.UnitType.Rocket)
 
@@ -161,7 +161,9 @@ def blinkToRandom_Earth(gc, unit):
         if gc.can_blink(unit.id, temp_location):
             gc.blink(unit.id, temp_location)
             return
-
+    except:
+        return
+        
 def blinkToRandom_Mars(gc, unit):
     marsMap = gc.starting_map(bc.Planet.Mars)
     i = random.randint(0, marsMap.height-1)
@@ -195,7 +197,7 @@ def blink_attack_mars(gc, unit):
         return
         
     location = unit.location
-    enemy_team = Info.get_enemy_team()
+    enemy_team = Info.get_enemy_team(gc)
         
     possible_targets = gc.sense_nearby_units_by_team(location.map_location(), 2, enemy_team)
     if len(possible_targets) > 2:
@@ -225,7 +227,7 @@ def blink_attack_earth(gc, unit):
         return
         
     location = unit.location
-    enemy_team = Info.get_enemy_team()
+    enemy_team = Info.get_enemy_team(gc)
     
     possible_targets = gc.sense_nearby_units_by_team(location.map_location(), 2, enemy_team)
     if len(possible_targets) > 2:

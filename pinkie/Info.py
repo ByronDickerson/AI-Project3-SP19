@@ -46,8 +46,6 @@ def getNumUnits(unitType, gcParam):
             numW+= 1
         elif unit.unit_type == bc.UnitType.Mage:
             numM+= 1
-        
-
 
     if unitType == bc.UnitType.Ranger:
         return numR
@@ -157,24 +155,26 @@ def pathrand():
 
 # is other unit an enemy?
 # returns true if other is an enemy
-def enemy(other):
+def enemy(other, gc):
     return other.team != gc.team()
 
 # does our unit have low health?
 # returns true if health is below 20%
-def lowHealth(unit):
+def lowHealth(unit): 
    return unit.health < (unit.max_health / 5)
 
-def get_enemy_team():
-	if gc.team() == bc.Team.Blue:
-		enemy_team = bc.Team.Red
+def get_enemy_team(gcp):
+    global gc
+    gc = gcp
+    if gc.team() == bc.Team.Blue:
+        enemy_team = bc.Team.Red
 
-	elif gc.team() == bc.Team.Red:
-		enemy_team = bc.Team.Blue
-	else:
-		enemy_team = None
-		print("oh fuck u did team wrong")
-	return enemy_team
+    elif gc.team() == bc.Team.Red:
+        enemy_team = bc.Team.Blue
+    else:
+        enemy_team = None
+        print("oh fuck u did team wrong")
+    return enemy_team
 
 # roll the dice (d100). if it's under value p, return true.
 def roll(p=50):

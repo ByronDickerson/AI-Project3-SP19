@@ -7,7 +7,7 @@ def healerLogic(unit, gc):
     # If unit is not on map, then do nothing
     if not unit.location.is_on_map():
         return
-
+ 
     #check for enemies
     enemies = []
     

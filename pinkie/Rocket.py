@@ -8,7 +8,7 @@ def rocketLogic(rocket, gc):
     # if full, or almost out of time, then launch
     # if on mars, unload
     # if on mars and empty? perish
-    
+     
     #if it isnt done being built then chill out
     if not rocket.structure_is_built():
         
@@ -69,7 +69,7 @@ def rocketMars(rocket, gc):
 #return false if even one person is not in garrison
 def allSlurped(gc):
     for unit in gc.my_units():
-        if not unit.is_in_garrison():
+        if not unit.location.is_in_garrison():
             return False
     return True
 
@@ -102,7 +102,7 @@ def launch(gc, unitId):
 # A situation is dire if the rocket is overwhelmed by opposite team with few allies
 def situation_is_dire(gc, rocket):
     if rocket.location.is_on_map():
-        foes = gc.sense_nearby_units_by_team(rocket.location.map_location(), 25, Info.get_enemy_team()) #is this radius valid? idk
+        foes = gc.sense_nearby_units_by_team(rocket.location.map_location(), 25, Info.get_enemy_team(gc)) #is this radius valid? idk
         friends = gc.sense_nearby_units_by_team(rocket.location.map_location(), 25, gc.team())
         
         #this means 85 percent of nearby bots are enemies so remaining 15 will probably perish soon

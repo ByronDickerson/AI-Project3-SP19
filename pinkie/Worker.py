@@ -12,7 +12,7 @@ def workerTryBuilding(gc, u ):
                 if not other.structure_is_built() and gc.can_build(u.id,other.id):
                     gc.build(u.id, other.id)
                     #print(u.id, ' Am still building this', other.unit_type)
-                    return True
+                    return True 
                 else:
                     return False
                     
