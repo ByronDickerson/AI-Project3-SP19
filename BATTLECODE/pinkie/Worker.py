@@ -18,7 +18,7 @@ def workerTryBuilding(gc, u ):
                     
 
 def workerLogic(gc, worker):
-    directions = Info.directions
+    directions = list(bc.Direction)
     location = worker.location #does this work?
     my_team = gc.team()
 

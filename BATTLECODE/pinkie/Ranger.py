@@ -31,9 +31,22 @@ def rangerLogic(unitParam, gcParam):
     #Current unit location
     unitLocation = unit.location.map_location()
 
-    #Nearby Enemy Location
-    enemies = Info.nearbyEnemies(unit, gc)
 
+    #target immediate enemies
+    if unit.team == bc.Team.Red:
+        enemies = gc.sense_nearby_units_by_team(unit.location.map_location(), 2, bc.Team.Blue)
+    else:
+        enemies = gc.sense_nearby_units_by_team(unit.location.map_location(), 2, bc.Team.Red)
+
+    if len(enemies) > 0:
+        for e in enemies:
+            if gc.can_attack(unit.id, e.id) and gc.is_attack_ready(unit.id):
+                gc.attack(unit.id, e.id)
+
+
+    #Nearby Enemy Location
+    enemies = Info.nearbyEnemiesAbility(unit, gc)
+    
     #If there are enemies, attack
     if len(enemies)>0:
         for enemy in enemies:
@@ -44,9 +57,10 @@ def rangerLogic(unitParam, gcParam):
                         gc.begin_snipe(unit.id, enemy.location.map_location())
                         return
 
-            elif gc.can_attack(unit.id, enemy.id) and gc.is_attack_ready(unit.id) :
-                gc.attack(unit.id, enemy.id)
-                #print("A Ranger Attacked")
+    if gc.can_attack(unit.id, enemy.id) and gc.is_attack_ready(unit.id) :
+        gc.attack(unit.id, enemy.id)
+        print("A Ranger Attacked")
+        
     else: # Move randomly
         d = random.choice(possibleDirections)
         if gc.can_move(unit.id, d):
