@@ -54,7 +54,7 @@ def workerMars(gc, worker):
             return
 
 def workerLogic(gc, worker):
-    directions = Info.directions
+    directions = list(bc.Direction)
     location = worker.location #does this work?
     my_team = gc.team()
 
@@ -119,10 +119,12 @@ def workerLogic(gc, worker):
             return
     
     
-    
-    dr = random.choice(directions)
+    random.shuffle(directions)
+    for dr in directions:
+        if gc.can_move(worker.id, dr):
+            trymove(gc, worker.id, dr)
     #last but not least, random walk
-    trymove(gc,worker.id, dr)
+    #trymove(gc,worker.id, dr)
     return
 
 def runaway(gc, worker, other):

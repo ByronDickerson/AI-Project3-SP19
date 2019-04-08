@@ -97,9 +97,7 @@ def nearbyTeam(unit, gcParam):
     else:
         nearbyTeam = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.attack_range(), bc.Team.Red)
     return nearbyTeam
-    
-    
-    
+   
 def nearbyTeamAbility(unit, gcParam):
     gc = gcParam
     nearbyTeam = []
