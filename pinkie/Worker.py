@@ -66,7 +66,7 @@ def workerLogic(gc, worker):
     
     
     # but if we are poor...try and fix that immediately
-    if gc.karbonite < 200:    
+    if gc.karbonite() < 200:    
         for d in directions:
             if gc.can_harvest(worker.id, d):
                 gc.harvest(worker.id, d)
