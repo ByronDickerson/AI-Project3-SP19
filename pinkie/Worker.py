@@ -16,6 +16,42 @@ def workerTryBuilding(gc, u ):
                 else:
                     return False
                     
+def workerMars(gc, worker):
+    directions = Info.directions
+    location = worker.location
+    my_team = gc.team()
+
+    
+    #If somebody has sensed a rocket landing, run there.
+    if Info.marsTarget is not None:
+        d = Info.pathfind(worker, Info.marsTarget)
+        trymove(gc, worker.id, d)
+        return 
+
+    # Search for threats (and attack if possible)
+    if location.is_on_map():
+        nearby = gc.sense_nearby_units(location.map_location(), 2)
+        for other in nearby:
+            if other.team != my_team and gc.is_attack_ready(worker.id) and gc.can_attack(worker.id, other.id):
+                #print(worker.id, ' is attacking ',other.id)
+                gc.attack(worker.id, other.id)
+                Info.marsTarget = other
+                return
+
+    #just go absolutely nuts on replication
+    for d in directions:
+            if gc.can_replicate(worker.id, d):
+                #print(worker.id, ' Am replicating ')
+                #print('Number of workers is', Info.getNumUnits(bc.UnitType.Worker, gc))
+                gc.replicate(worker.id, d)
+                return
+
+    # And finally, harvest.
+    for d in directions:
+        if gc.can_harvest(worker.id, d):
+            gc.harvest(worker.id, d)
+            #print(worker.ID, ' Am harvesting stuff ')
+            return
 
 def workerLogic(gc, worker):
     directions = Info.directions

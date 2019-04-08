@@ -57,7 +57,10 @@ while True:
 
             if unit.unit_type == bc.UnitType.Worker:
                 #worker = Factory.Worker(unit) #instantiate custom worker object
-                Worker.workerLogic(gc, unit)
+                if gc.planet() == bc.Planet.Mars:
+                    Worker.workerMars(gc, unit)
+                else:
+                    Worker.workerLogic(gc, unit)
             
             if unit.unit_type == bc.UnitType.Rocket:
                 #if rocket.location.map_location().planet == bc.Planet.Mars:
@@ -75,49 +78,6 @@ while True:
             if unit.unit_type == bc.UnitType.Healer:
                 Healer.healerLogic(unit, gc)
                
-            # first, let's look for nearby blueprints to work on
-            '''location = unit.location
-            if location.is_on_map():
-                nearby = gc.sense_nearby_units(location.map_location(), 2)
-                for other in nearby:
-                    if unit.unit_type == bc.UnitType.Worker and gc.can_build(unit.id, other.id):
-                        gc.build(unit.id, other.id)
-                        #print('built a factory!')
-                        # move onto the next unit
-                        continue
-                    if other.team != my_team and gc.is_attack_ready(unit.id) and gc.can_attack(unit.id, other.id):
-                        #print('attacked a thing!')
-                        gc.attack(unit.id, other.id)
-                        continue
-            
-            # okay, there weren't any dudes around
-            # pick a random direction:
-            #d = random.choice(directions)
-
-            # or, try to build a factory:
-            if gc.karbonite() > bc.UnitType.Factory.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Factory, d):
-                gc.blueprint(unit.id, bc.UnitType.Factory, d)
-            # and if that fails, try to move
-            
-
-            if Info.getNumUnits(bc.UnitType.Rocket, gc) < 1 and gc.karbonite() > bc.UnitType.Rocket.blueprint_cost() and gc.can_blueprint(unit.id, bc.UnitType.Rocket, d):
-                if unit.id == rocket_builder_id:
-                    try:
-                        gc.build(unit.id, rocket_id)
-                    except:
-                        continue
-                    continue
-
-                gc.blueprint(unit.id, bc.UnitType.Rocket, d)
-                rocket_count += 1 #increment how many rockets we got...so we only build 1...
-                rocket_builder_id = unit.id
-                print('built a rocket!')
-                # move onto the next unit
-                continue
-            elif gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
-                gc.move_robot(unit.id, d)
-                '''
-
     except Exception as e:
         print('Error:', e)
         # use this to show where the error was

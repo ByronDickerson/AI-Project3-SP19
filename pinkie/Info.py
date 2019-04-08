@@ -12,6 +12,11 @@ maxHealers = 5
 maxMages = 5
 maxWorkers = 10 #not used?
 
+marsTarget = None #On mars we will be savage and immediately swarm whoever we see
+
+def getTotalNumUnits():
+    return len(list(gc.my_units()))
+    
 def getNumUnits(unitType, gcParam):
     global gc
     gc = gcParam
@@ -69,6 +74,39 @@ def nearbyEnemies(unit, gcParam):
         nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.attack_range(), bc.Team.Red)
     return nearbyEnemies
 
+
+def nearbyEnemiesAbility(unit, gcParam):
+    gc = gcParam
+    nearbyEnemies = []
+    
+    if unit.team == bc.Team.Red:
+        nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.ability_range(), bc.Team.Blue)
+    else:
+        nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.ability_range(), bc.Team.Red)
+    return nearbyEnemies
+    
+    
+def nearbyTeam(unit, gcParam):
+    gc = gcParam
+    nearbyTeam = []
+    
+    if unit.team == bc.Team.Blue:
+        nearbyTeam = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.attack_range(), bc.Team.Blue)
+    else:
+        nearbyTeam = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.attack_range(), bc.Team.Red)
+    return nearbyTeam
+    
+    
+    
+def nearbyTeamAbility(unit, gcParam):
+    gc = gcParam
+    nearbyTeam = []
+    
+    if unit.team == bc.Team.Blue:
+        nearbyTeam = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.ability_range(), bc.Team.Blue)
+    else:
+        nearbyTeam = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.ability_range(), bc.Team.Red)
+    return nearbyTeam
 
 # tells unit which way to walk to get closer to target
 # returns a direction

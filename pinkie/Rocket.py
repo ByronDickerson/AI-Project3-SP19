@@ -21,15 +21,19 @@ def rocketLogic(rocket, gc):
     #also launch if you're full
     if (gc.round() >= 700 and occupants > 0) or (occupants == 8):
         #from slink3
-        launch(gc, gc.starting_map(bc.Planet.Mars), rocket.id)
+        launch(gc, rocket.id)
         
         return
     
+    # If situation is dire, just launch
+    if occupants > 0 and situation_is_dire(gc, rocket):
+        launch(gc, rocket.id)
+
     rocketLoc = rocket.location.map_location()
     
     #otherwise, load some boys. 
     #rocket chooses who to load; it takes priority
-    nearby = nearby = gc.sense_nearby_units(rocketLoc, 2)
+    nearby = gc.sense_nearby_units(rocketLoc, 2)
     for other in nearby:
         if gc.can_load(rocket.id,other.id):
             gc.load(rocket.id, other.id)
@@ -60,7 +64,8 @@ def rocketMars(rocket, gc):
     
 #helper to rocket
 #copied entirely from the skid3 guy or whatever the name is
-def launch(gc, marsMap, unitId):
+def launch(gc, unitId):
+    marsMap =  gc.starting_map(bc.Planet.Mars)
     if gc.unit(unitId).structure_is_built():
         this_rocket = gc.unit(unitId)
     else:
@@ -81,3 +86,14 @@ def launch(gc, marsMap, unitId):
         print('Invalid destination is ', destination)
         print('mars size is ',marsMap.width, 'x',marsMap.height)
 
+#returns true or false
+# A situation is dire if the rocket is overwhelmed by opposite team with few allies
+def situation_is_dire(gc, rocket):
+    if rocket.location.is_on_map():
+        foes = gc.sense_nearby_units_by_team(rocket.location.map_location(), 25, Info.get_enemy_team()) #is this radius valid? idk
+        friends = gc.sense_nearby_units_by_team(rocket.location.map_location(), 25, gc.team())
+        
+        if len(friends) / len(foes) < 0.15:
+            return True #this means 85 percent of nearby bots are enemies so remaining 15 will probably perish soon
+        return False
+    

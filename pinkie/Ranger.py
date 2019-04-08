@@ -49,6 +49,7 @@ def rangerLogic(unitParam, gcParam):
                 #print("A Ranger Attacked")
     else:
         # Move randomly
+        random.shuffle(possibleDirections)
         for direction in possibleDirections:
             if gc.can_move(unit.id, direction):
                 gc.move_robot(unit.id, direction)
