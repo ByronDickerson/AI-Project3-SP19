@@ -22,11 +22,23 @@ def workerLogic(gc, worker):
     location = worker.location #does this work?
     my_team = gc.team()
 
-    #The worker will prioritize building
-    #Then attacking
-    #THen gathering resources
+    #The worker will prioritize replicating
     #Then replicating
+    #Then attacking
+    #Then gathering resources
     #Then wandering around
+
+        #wwhere 10 is the max number of workers
+    if Info.getNumUnits(bc.UnitType.Worker,gc) < 10:
+        for d in directions:
+            if gc.can_replicate(worker.id, d):
+                #print(worker.id, ' Am replicating ')
+                #print('Number of workers is', Info.getNumUnits(bc.UnitType.Worker, gc))
+                gc.replicate(worker.id, d)
+                return
+            # a child is born. we should initialize it as a Worker class. but...for now...whatever man
+
+    
     if workerTryBuilding(gc, worker):
         return 
 
@@ -61,16 +73,6 @@ def workerLogic(gc, worker):
             gc.harvest(worker.id, d)
             #print(worker.ID, ' Am harvesting stuff ')
             return
-    
-    #wwhere 10 is the max number of workers
-    if Info.getNumUnits(bc.UnitType.Worker,gc) < 10:
-        for d in directions:
-            if gc.can_replicate(worker.id, d):
-                #print(worker.id, ' Am replicating ')
-                #print('Number of workers is', Info.getNumUnits(bc.UnitType.Worker, gc))
-                gc.replicate(worker.id, d)
-                return
-            # a child is born. we should initialize it as a Worker class. but...for now...whatever man
     
     dr = random.choice(directions)
     #last but not least, random walk

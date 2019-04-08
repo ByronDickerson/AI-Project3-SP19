@@ -24,7 +24,7 @@ def knightAction(gc, unit):
             # if the other unit is an enemy and knight can attack
             if Info.enemy(other) and gc.is_attack_ready(unit.id):
                 #attack
-                print('attacked a thing!')
+                print('A knight attacked!')
                 gc.attack(unit.id, other.id)
         # else no enemies near, carry on
         

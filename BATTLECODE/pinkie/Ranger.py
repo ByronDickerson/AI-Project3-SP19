@@ -47,9 +47,8 @@ def rangerLogic(unitParam, gcParam):
             elif gc.can_attack(unit.id, enemy.id) and gc.is_attack_ready(unit.id) :
                 gc.attack(unit.id, enemy.id)
                 #print("A Ranger Attacked")
-    else:
-        # Move randomly
-        for direction in possibleDirections:
-            if gc.can_move(unit.id, direction):
-                gc.move_robot(unit.id, direction)
-                return
+    else: # Move randomly
+        d = random.choice(possibleDirections)
+        if gc.can_move(unit.id, d):
+            gc.move_robot(unit.id, d)
+            return
