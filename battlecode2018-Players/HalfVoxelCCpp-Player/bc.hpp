@@ -1,1 +1,0 @@
-../battlecode-2018-cpp-api/bc.hpp

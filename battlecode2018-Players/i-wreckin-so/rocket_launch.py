@@ -1,2 +1,0 @@
-class RocketLaunch(object):
-    pass

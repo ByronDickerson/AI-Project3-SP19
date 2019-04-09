@@ -1,2 +1,0 @@
-class WorkerReplicate(object):
-    pass

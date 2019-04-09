@@ -1,2 +1,0 @@
-class RangerMove(object):
-    pass
