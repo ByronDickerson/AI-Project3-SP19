@@ -53,12 +53,9 @@ def knightAction(gc, unit):
             for other in longrange:
                 # does this unit have low health and has it located a friendly healer?
                 seekhealer = Info.lowHealth(unit) and (not Info.enemy(other,gc)) and other.unit_type == bc.UnitType.Healer
-                # take actual movement
-                if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
-                    gc.move_robot(unit.id, d)
             
-                # if enemy or a needed healer or a rocket is spotted, go towards that unit
-                if seekhealer or Info.enemy(other,gc) or other.unit_type == bc.UnitType.Rocket:
+                # if enemy or a needed healer, go towards that unit
+                if seekhealer or Info.enemy(other,gc):
                     d = Info.pathfind(unit, other)
                     # take actual movement
                     if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
