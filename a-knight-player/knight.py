@@ -1,7 +1,9 @@
 # Knight Unit Targeting
-# Need token force to stay with rangers
 # otherwise SEARCH AND DESTROY
 # retreat to healer if low
+
+# ToDO: instead of random motion, direct idle knights towards unexplored locations
+# ToDO: implement other unit's swarm ability; go after any enemies identified on map
 
 import random
 import toolbox as tb
@@ -51,7 +53,7 @@ def knightAction(bc, gc, unit):
                 
                 # if enemy or a needed healer is spotted, go towards that unit
                 if seekhealer or tb.enemy(gc, other):
-                    d = tb.pathfind(bc, unit, other)                   
+                    d = tb.pathfind(bc, unit, other)
 
                 # if no better options, move randomly
                 else:
