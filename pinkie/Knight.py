@@ -1,16 +1,12 @@
 # Knight Unit Targeting
-# otherwise SEARCH AND DESTROY
-# retreat to healer if low
+# Seeks and destroys enemies, attacking however possible.
+# Retreats to nearby healers if health is low.
+# Randomly explores world map.
 
-# ToDO: instead of random motion, direct idle knights towards unexplored locations
-# ToDO: implement other unit's swarm ability; go after any enemies identified on map
+import battlecode as bc
+import Info  
 
-import random
-import toolbox as tb
-
-# maybe consider also coding worker resource location
-
-def knightAction(bc, gc, unit):
+def knightAction(gc, unit):
 
     location = unit.location  # knight's current location
     my_team = gc.team()       # our team
@@ -24,9 +20,8 @@ def knightAction(bc, gc, unit):
         # for units within attack range
         for other in shortrange:            
             # if the other unit is an enemy and knight can attack
-            if tb.enemy(gc, other) and gc.is_attack_ready(unit.id):
+            if type(other) != int and Info.enemy(other,gc) and gc.is_attack_ready(unit.id):
                 #attack
-                print('attacked a thing!')
                 gc.attack(unit.id, other.id)
         # else no enemies near, carry on
         
@@ -38,28 +33,38 @@ def knightAction(bc, gc, unit):
             #for units within javelin range
             for other in midrange:
                 # if enemy detected, attack
-                if tb.enemy(gc, other):
+                if Info.enemy(other,gc):
                     gc.javelin(unit.id, other.id)
         # else no javelin, carry on
 
         # if unit can move
         if gc.is_move_ready(unit.id):
+
+            # if we're on Mars and there's a MarsTarget, find them
+            if gc.planet() == bc.Planet.Mars and Info.marsTarget is not None:
+                d = Info.pathfind(unit, Info.marsTarget)
+                # take actual movement
+                if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
+                    gc.move_robot(unit.id, d)
+            
             # list all units within sight range
             longrange = gc.sense_nearby_units(location.map_location(), 50)
 
             for other in longrange:
                 # does this unit have low health and has it located a friendly healer?
-                seekhealer = tb.lowHealth(unit) and (not tb.enemy(gc, other)) and other.unit_type == bc.UnitType.Healer
-                
-                # if enemy or a needed healer is spotted, go towards that unit
-                if seekhealer or tb.enemy(gc, other):
-                    d = tb.pathfind(bc, unit, other)
+                seekhealer = Info.lowHealth(unit) and (not Info.enemy(other,gc)) and other.unit_type == bc.UnitType.Healer
+            
+                # if enemy or a needed healer, go towards that unit
+                if seekhealer or Info.enemy(other,gc):
+                    d = Info.pathfind(unit, other)
+                    # take actual movement
+                    if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
+                        gc.move_robot(unit.id, d)
 
-                # if no better options, move randomly
-                else:
-                    d = tb.pathrand(bc)
-                    
+            # if no better options, move randomly
+                d = Info.pathrand()
                 # take actual movement
                 if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
                     gc.move_robot(unit.id, d)
+                    
         # else no motion, carry on
