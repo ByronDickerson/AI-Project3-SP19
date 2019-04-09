@@ -39,22 +39,35 @@ def knightAction(gc, unit):
 
         # if unit can move
         if gc.is_move_ready(unit.id):
+
+            # if we're on Mars and there's a MarsTarget, find them
+            if gc.planet() == bc.Planet.Mars and Info.marsTarget is not None:
+                d = Info.pathfind(unit, Info.marsTarget)
+                # take actual movement
+                if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
+                    gc.move_robot(unit.id, d)
+            
             # list all units within sight range
             longrange = gc.sense_nearby_units(location.map_location(), 50)
 
             for other in longrange:
                 # does this unit have low health and has it located a friendly healer?
                 seekhealer = Info.lowHealth(unit) and (not Info.enemy(other,gc)) and other.unit_type == bc.UnitType.Healer
-                
-                # if enemy or a needed healer or a rocket is spotted, go towards that unit
-                if seekhealer or Info.enemy(other,gc) or other.unit_type == bc.UnitType.Rocket:
-                    d = Info.pathfind(unit, other)
-
-                # if no better options, move randomly
-                else:
-                    d = Info.pathrand()
-                    
                 # take actual movement
                 if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
                     gc.move_robot(unit.id, d)
+            
+                # if enemy or a needed healer or a rocket is spotted, go towards that unit
+                if seekhealer or Info.enemy(other,gc) or other.unit_type == bc.UnitType.Rocket:
+                    d = Info.pathfind(unit, other)
+                    # take actual movement
+                    if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
+                        gc.move_robot(unit.id, d)
+
+            # if no better options, move randomly
+                d = Info.pathrand()
+                # take actual movement
+                if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):
+                    gc.move_robot(unit.id, d)
+                    
         # else no motion, carry on

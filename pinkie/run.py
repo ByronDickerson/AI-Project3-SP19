@@ -1,3 +1,12 @@
+# The mastermind AI controlling all our battlecode units
+# Made for CoSc 370: AI, Spring 2018
+# Programmers:
+# Clara Comstock
+# Byron Dickerson
+# Alexander Kline
+# Olivia Lyons
+
+
 import battlecode as bc
 import random
 import sys

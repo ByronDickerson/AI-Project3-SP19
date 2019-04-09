@@ -14,6 +14,7 @@ maxWorkers = 10 #not used?
 maxFactories = 5
 maxRockets = 3
 
+# an enemy unit for everyone to search and destroy on the surface of Mars
 marsTarget = None #On mars we will be savage and immediately swarm whoever we see
 
 # return list of the number of each type of unit we have
