@@ -14,11 +14,14 @@ maxWorkers = 10 #not used?
 maxFactories = 5
 maxRockets = 3
 
+# an enemy unit for everyone to search and destroy on the surface of Mars
 marsTarget = None #On mars we will be savage and immediately swarm whoever we see
 
+# return list of the number of each type of unit we have
 def getTotalNumUnits():
     return len(list(gc.my_units()))
-    
+
+# count how many of each type of unit we have
 def getNumUnits(unitType, gcParam):
     global gc
     gc = gcParam
@@ -62,6 +65,7 @@ def getNumUnits(unitType, gcParam):
     elif unitType == bc.UnitType.Mage:
         return numM
 
+# detect number of enemies within attack range of unit
 def nearbyEnemies(unit, gcParam):
     gc = gcParam
     nearbyEnemies = []
@@ -74,7 +78,7 @@ def nearbyEnemies(unit, gcParam):
         nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.attack_range(), bc.Team.Red)
     return nearbyEnemies
 
-
+# detect number of enemies within the ability range of unit
 def nearbyEnemiesAbility(unit, gcParam):
     gc = gcParam
     nearbyEnemies = []
@@ -85,7 +89,7 @@ def nearbyEnemiesAbility(unit, gcParam):
         nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.ability_range(), bc.Team.Red)
     return nearbyEnemies
     
-    
+# detect number of friendlies within unit attack range    
 def nearbyTeam(unit, gcParam):
     gc = gcParam
     nearbyTeam = []
@@ -95,7 +99,8 @@ def nearbyTeam(unit, gcParam):
     else:
         nearbyTeam = gc.sense_nearby_units_by_team(unit.location.map_location(), unit.attack_range(), bc.Team.Red)
     return nearbyTeam
-   
+
+# detect number of friendlies within unit ability range   
 def nearbyTeamAbility(unit, gcParam):
     gc = gcParam
     nearbyTeam = []
@@ -163,6 +168,7 @@ def enemy(other, gc):
 def lowHealth(unit): 
    return unit.health < (unit.max_health / 5)
 
+# return enemy team color
 def get_enemy_team(gcp):
     global gc
     gc = gcp

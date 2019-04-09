@@ -1,6 +1,5 @@
 import battlecode as bc 
 import Info
-import random
 
 possibleDirections = list(bc.Direction)
 unit = 0
@@ -82,12 +81,12 @@ def rangerMars(unitParam, gcParam):
         if gc.round() > 600:
             nearby_rocket = gc.sense_nearby_units_by_type(unit.location.map_location(), 2, bc.UnitType.Rocket)
             for r in nearby_rocket: # if there are no nearby rockets then it just continues doin other stuff
-                #if len(r.structure_garrison()) < 8: # don't bother if it's already full
+                if len(r.structure_garrison()) < 8: # don't bother if it's already full
                 #actually run toward even if it is full, to defend it
-                run_toward_rocket(gc, unit, r)
+                    run_toward_rocket(gc, unit, r)
 
     else: # Move randomly
-        d = random.choice(possibleDirections)
+        d = Info.pathrand()
         if gc.can_move(unit.id, d):
             gc.move_robot(unit.id, d)
             return
@@ -156,7 +155,7 @@ def rangerLogic(unitParam, gcParam):
                 run_toward_rocket(gc, unit, r)
 
     else: # Move randomly
-        d = random.choice(possibleDirections)
+        d = Info.pathrand()
         if gc.can_move(unit.id, d):
             gc.move_robot(unit.id, d)
             return
