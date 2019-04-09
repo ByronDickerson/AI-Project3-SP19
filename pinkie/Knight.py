@@ -51,7 +51,7 @@ def knightAction(gc, unit):
                 
                 # if enemy or a needed healer is spotted, go towards that unit
                 if seekhealer or Info.enemy(other,gc):
-                    d = Info.pathfind(unit, other)                   
+                    d = Info.pathfind(unit, other)
 
                 # if no better options, move randomly
                 else:
