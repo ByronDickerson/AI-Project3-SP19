@@ -1,12 +1,10 @@
 # Knight Unit Targeting
-# Need token force to stay with rangers
-# otherwise SEARCH AND DESTROY
-# retreat to healer if low
-import battlecode as bc
-import random
-import Info  
+# Seeks and destroys enemies, attacking however possible.
+# Retreats to nearby healers if health is low.
+# Randomly explores world map.
 
-# maybe consider also coding worker resource location
+import battlecode as bc
+import Info  
 
 def knightAction(gc, unit):
 
@@ -24,7 +22,6 @@ def knightAction(gc, unit):
             # if the other unit is an enemy and knight can attack
             if type(other) != int and Info.enemy(other,gc) and gc.is_attack_ready(unit.id):
                 #attack
-                #print('attacked a thing!')
                 gc.attack(unit.id, other.id)
         # else no enemies near, carry on
         
@@ -49,13 +46,13 @@ def knightAction(gc, unit):
                 # does this unit have low health and has it located a friendly healer?
                 seekhealer = Info.lowHealth(unit) and (not Info.enemy(other,gc)) and other.unit_type == bc.UnitType.Healer
                 
-                # if enemy or a needed healer is spotted, go towards that unit
-                if seekhealer or Info.enemy(other,gc):
+                # if enemy or a needed healer or a rocket is spotted, go towards that unit
+                if seekhealer or Info.enemy(other,gc) or other.unit_type == bc.UnitType.Rocket:
                     d = Info.pathfind(unit, other)
 
                 # if no better options, move randomly
                 else:
-                    d = random.choice(Info.directions)
+                    d = Info.pathrand()
                     
                 # take actual movement
                 if gc.is_move_ready(unit.id) and gc.can_move(unit.id, d):

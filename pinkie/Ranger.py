@@ -1,6 +1,5 @@
 import battlecode as bc 
 import Info
-import random
 
 possibleDirections = list(bc.Direction)
 unit = 0
@@ -87,7 +86,7 @@ def rangerMars(unitParam, gcParam):
                 run_toward_rocket(gc, unit, r)
 
     else: # Move randomly
-        d = random.choice(possibleDirections)
+        d = Info.pathrand()
         if gc.can_move(unit.id, d):
             gc.move_robot(unit.id, d)
             return
@@ -156,7 +155,7 @@ def rangerLogic(unitParam, gcParam):
                 run_toward_rocket(gc, unit, r)
 
     else: # Move randomly
-        d = random.choice(possibleDirections)
+        d = Info.pathrand()
         if gc.can_move(unit.id, d):
             gc.move_robot(unit.id, d)
             return

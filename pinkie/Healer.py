@@ -12,9 +12,9 @@ def healerLogic(unit, gc):
     enemies = []
     
     if unit.team == bc.Team.Red:
-        nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), 5, bc.Team.Blue)
+        enemies = gc.sense_nearby_units_by_team(unit.location.map_location(), 5, bc.Team.Blue)
     else:
-        nearbyEnemies = gc.sense_nearby_units_by_team(unit.location.map_location(), 5, bc.Team.Red)
+        enemies = gc.sense_nearby_units_by_team(unit.location.map_location(), 5, bc.Team.Red)
 
     #Healer should runaway from enemies
     if len(enemies) > 0:
@@ -85,7 +85,7 @@ def guard(gc, unit, nearfriends):
     followDir = Info.pathfind(unit,gtarget)
 
     if Info.roll(25):  #25 percent chance to move randomly instead of directly follow...this way it won't pin someone to a wall
-        followDir = random.choice(Info.directions)
+        followDir = Info.pathrand()
     trymove(gc, unit.id, followDir)
     
 #custom move function for clarity. completely unnecessary but whatver
