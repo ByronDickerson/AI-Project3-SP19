@@ -69,8 +69,9 @@ def rocketMars(rocket, gc):
 #return false if even one person is not in garrison
 def allSlurped(gc):
     for unit in gc.my_units():
-        if not unit.location.is_in_garrison():
-            return False
+        if (unit.unit_type != bc.UnitType.Factory) and (unit.unit_type != bc.UnitType.Rocket): #not a structure
+            if not unit.location.is_in_garrison(): #and not in structure
+                return False #then no problem
     return True
 
 
